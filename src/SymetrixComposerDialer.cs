@@ -11,7 +11,8 @@ using SymetrixComposerEpi.Utils;
 
 namespace SymetrixComposerEpi
 {
-    public class SymetrixComposerDialer : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasPhoneDialing
+    // Todo: Add IOnline
+    public class SymetrixComposerDialer : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasPhoneDialing, IOnline
     {
         public string CallerId
         {
@@ -223,15 +224,28 @@ namespace SymetrixComposerEpi
             ((IBasicVolumeWithFeedback) _atcRx).MuteOff();
         }
 
-        public IntFeedback VolumeLevelFeedback { get; private set; }
-        public BoolFeedback MuteFeedback { get; private set; }
+        public IntFeedback VolumeLevelFeedback
+        {
+            get { return _atcRx.VolumeLevelFeedback; } }
+
+        public BoolFeedback MuteFeedback
+        {
+            get { return _atcRx.MuteFeedback; } }
 
         /// <summary>
         /// Toggles the do not disturb state
         /// </summary>
         public void DoNotDisturbToggle()
         {
-            // Parent.SendLine(string.Format("csv \"{0}\" {1}", Tags.DoNotDisturbTag, dndStateInt));
+            if (_isIsDnd)
+            {
+                DoNotDisturbOff();
+            }
+            else
+            {
+                DoNotDisturbOn();
+            }
+
         }
 
         /// <summary>
@@ -239,6 +253,7 @@ namespace SymetrixComposerEpi
         /// </summary>
         public void DoNotDisturbOn()
         {
+            throw new NotImplementedException();
             // Parent.SendLine(string.Format("csv \"{0}\" 1", Tags.DoNotDisturbTag));
         }
 
@@ -247,6 +262,7 @@ namespace SymetrixComposerEpi
         /// </summary>
         public void DoNotDisturbOff()
         {
+            throw new NotImplementedException();
             // Parent.SendLine(string.Format("csv \"{0}\" 0", Tags.DoNotDisturbTag));
         }
 
@@ -261,7 +277,17 @@ namespace SymetrixComposerEpi
 
         public void EndPhoneCall()
         {
-            throw new NotImplementedException();
+            var command = string.Empty;
+            if (_isRinging)
+                command = FaderUtils.GetStatePulseCommand(RejectId);
+
+            if (PhoneOffHookFeedback.BoolValue)
+                command = FaderUtils.GetStatePulseCommand(ConnectAndDisconnectId);
+
+            if (string.IsNullOrEmpty(command))
+                return;
+
+            Coms.SendText(command);
         }
 
         public void SendDtmfToPhone(string digit)
@@ -368,6 +394,20 @@ namespace SymetrixComposerEpi
         {
             ((IBasicVolumeControls) _atcRx).MuteToggle();
         }
+
+
+        public static class ResourceId
+        {
+            public const int SpeedDialNumber = 1000;
+            public const int SpeedDialName = 1001;
+            public const int DialedNumber = 1002;
+            public const int CallId = 1003;
+            public const int NumberToDial = 1004;
+            public const int CallStatus = 1005;
+            public const int CallTimer = 1005;
+        }
+
+        public BoolFeedback IsOnline { get; private set; }
     }
 
     // SSYSS <unit>.<resource>.<enum>.<card>.<channel>=[<value>]<CR>
@@ -377,33 +417,4 @@ namespace SymetrixComposerEpi
         <card> is 0-3 for plug-in slots A-D.
         <channel> is zero based and 0 where not applicable. 
     */
-
-    public static class ResourceId
-    {
-        public const int SpeedDialNumber = 1000;
-        public const int SpeedDialName = 1001;
-        public const int DialedNumber = 1002;
-        public const int CallId = 1003;
-        public const int NumberToDial = 1004;
-        public const int CallStatus = 1005;
-        public const int CallTimer = 1005;
-    }
-
-    public enum EKeypadKeys
-    {
-        Num1,
-        Num2,
-        Num3,
-        Num4,
-        Num5,
-        Num6,
-        Num7,
-        Num8,
-        Num9,
-        Num0,
-        Star,
-        Pound,
-        Clear,
-        Backspace
-    }
 }

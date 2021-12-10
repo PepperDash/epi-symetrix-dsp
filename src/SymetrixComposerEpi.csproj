@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\ParsingUtils.cs" />
+    <Compile Include="Enums\EKeypadKeys.cs" />
     <Compile Include="SymetrixComposerDialer.cs" />
     <Compile Include="SymetrixComposerDspPreset.cs" />
     <Compile Include="Utils\DialerUtils.cs" />

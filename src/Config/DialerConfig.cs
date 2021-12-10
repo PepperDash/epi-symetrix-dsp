@@ -3,6 +3,10 @@
     public class DialerConfig
     {
         public bool ClearDialstringWhenConnected { get; set; }
+        public int RxVolumeId { get; set; }
+        public int RxMuteId { get; set; }
+        public int? RxUserMaximum { get; set; }
+        public int? RxUserMinimum { get; set; }
         public int UnitNumber { get; set; }
         public int CardSlot { get; set; }
         public int LineNumber { get; set; }

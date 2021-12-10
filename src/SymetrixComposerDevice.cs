@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Crestron.SimplSharp;
 using Crestron.SimplSharpPro.DeviceSupport;
 using PepperDash.Core;
 using PepperDash.Essentials.Core;
@@ -45,6 +46,14 @@ namespace SymetrixComposerEpi
             Faders = ConfigUtils.BuildFaders(Key, props, Coms);
             PresetsImpl = ConfigUtils.BuildPresets(Key, props);
             Dialers = ConfigUtils.BuildDialers(Key, props, Coms);
+
+            IsOnline.OutputChange += (sender, args) =>
+            {
+                if (args.BoolValue)
+                    Coms.SendText("PUR\r");
+            };
+
+            DeviceManager.AllDevicesActivated += (sender, args) => CrestronInvoke.BeginInvoke(o => Coms.Connect());
         }
 
         private void PortGatherOnLineReceived(object sender, GenericCommMethodReceiveTextArgs args)
@@ -63,33 +72,26 @@ namespace SymetrixComposerEpi
                     Faders
                         .Where(f => f.VolumeControllerId == controllerId)
                         .ToList()
-                        .ForEach(UpdateVolumeControllerPosition(response));
+                        .ForEach(FaderUtils.UpdateVolumeControllerPosition(cleanedResponse));
 
                     Faders
                         .Where(f => f.MuteControllerId == controllerId)
                         .ToList()
-                        .ForEach(f => f.IsMuted = ParsingUtils.ParseState(cleanedResponse));
+                        .ForEach(FaderUtils.UpdateMuteControllerPosition(cleanedResponse));
 
                     Dialers
                         .Where(d => d.HasControllerId(controllerId))
                         .ToList()
-                        .ForEach(
-                            d =>
-                            {
-                                if (controllerId == d.IsBusyId)
-                                    d.IsBusy = ParsingUtils.ParseState(cleanedResponse);
-                            });
+                        .ForEach(DialerUtils.ParseAndUpdateDialerState(cleanedResponse, controllerId));
                 }
+
+                // TODO System string parsing
             }
             catch (Exception ex)
             {
-                Debug.Console(1, this, Debug.ErrorLogLevel.Notice, "Error parsing response:{0} | {1}", response, ex.Message);
+                Debug.Console(
+                    1, this, Debug.ErrorLogLevel.Notice, "Error parsing response:{0} | {1}", response, ex.Message);
             }
-        }
-
-        private static Action<SymetrixComposerLevelControl> UpdateVolumeControllerPosition(string response)
-        {
-            return f => f.Volume = ParsingUtils.ParseVolume(response);
         }
 
         public override void LinkToApi(BasicTriList trilist, uint joinStart, string joinMapKey, EiscApiAdvanced bridge)

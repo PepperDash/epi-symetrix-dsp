@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using SymetrixComposerEpi.Config;
 
 namespace SymetrixComposerEpi.Utils
 {
@@ -100,6 +102,23 @@ namespace SymetrixComposerEpi.Utils
                 default:
                     return string.Empty;
             }
+        }
+
+        public static Action<SymetrixComposerDialer> ParseAndUpdateDialerState(string response, int controllerId)
+        {
+            return dialer =>
+            {
+                if (controllerId == dialer.IsBusyId)
+                    dialer.IsBusy = ParsingUtils.ParseState(response);
+                if (controllerId == dialer.IsConnectedId)
+                    dialer.IsConnected = ParsingUtils.ParseState(response);
+                if (controllerId == dialer.IsDialingId)
+                    dialer.IsDialing = ParsingUtils.ParseState(response);
+                if (controllerId == dialer.IsOnHoldId)
+                    dialer.IsOnHold = ParsingUtils.ParseState(response);
+                if (controllerId == dialer.DndId)
+                    dialer.IsInDnd = ParsingUtils.ParseState(response);
+            };
         }
     }
 }
