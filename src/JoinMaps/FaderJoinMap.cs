@@ -92,7 +92,8 @@ namespace SymetrixComposerEpi.JoinMaps
             {
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
                 JoinType = eJoinType.Analog,
-                Description = "Icon"
+                Description = "Type",
+                ValidValues = new[] {"0", "1"},
             });
 
         [JoinName("Name")] public JoinDataComplete Name = new JoinDataComplete(

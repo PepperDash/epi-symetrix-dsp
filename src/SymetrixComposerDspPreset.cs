@@ -1,8 +1,4 @@
-﻿using System;
-using Crestron.SimplSharpPro.DeviceSupport;
-using PepperDash.Core;
-using PepperDash.Essentials.Core;
-using PepperDash.Essentials.Core.Bridges;
+﻿using PepperDash.Essentials.Core;
 
 namespace SymetrixComposerEpi
 {

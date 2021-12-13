@@ -113,12 +113,12 @@ namespace SymetrixComposerEpi.Utils
             return scaledIncrement;
         }
 
-        public static Action<SymetrixComposerLevelControl> UpdateVolumeControllerPosition(string response)
+        public static Action<SymetrixComposerFader> UpdateVolumeControllerPosition(string response)
         {
             return f => f.Volume = ParsingUtils.ParseVolume(response);
         }
 
-        public static Action<SymetrixComposerLevelControl> UpdateMuteControllerPosition(string response)
+        public static Action<SymetrixComposerFader> UpdateMuteControllerPosition(string response)
         {
             return f => f.IsMuted = ParsingUtils.ParseState(response);
         }

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Crestron.SimplSharp;
 using PepperDash.Core;
 
-namespace SymetrixComposerEpi.Config
+namespace SymetrixComposerEpi.Utils
 {
     public static class ParsingUtils
     {

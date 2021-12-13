@@ -10,7 +10,7 @@ using Feedback = PepperDash.Essentials.Core.Feedback;
 
 namespace SymetrixComposerEpi
 {
-    public class SymetrixComposerLevelControl : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasFeedback
+    public class SymetrixComposerFader : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasFeedback
     {
         public const int DefaultFaderMinimum = -72;
         public const int DefaultFaderMaximum = 12;
@@ -57,10 +57,11 @@ namespace SymetrixComposerEpi
         }
 
         // CC <CONTROLLER NUMBER> <DEC/INC> <AMOUNT><CR>
-        public SymetrixComposerLevelControl(string key, FaderConfig config, IBasicCommunication coms)
+        public SymetrixComposerFader(string key, FaderConfig config, IBasicCommunication coms)
             : base(key, config.Label)
         {
             Key = key;
+            Debug.Console(1, this, "Building...");
             Name = config.Label;
             VolumeControllerId = config.LevelControlId;
             MuteControllerId = config.MuteControlId;
@@ -76,7 +77,8 @@ namespace SymetrixComposerEpi
             VolumeLevelFeedback = new IntFeedback(Key + "-Volume", () => Volume);
             NameFeedback = new StringFeedback(() => Name);
             ControlTypeFeedback = new IntFeedback(() => config.IsMic ? MicrophoneType : SpeakerType);
-            
+
+            Debug.Console(1, this, "Adding myself to the Device Manager");
             DeviceManager.AddDevice(this);
         }
 
@@ -231,6 +233,25 @@ namespace SymetrixComposerEpi
         public override void LinkToApi(BasicTriList trilist, uint joinStart, string joinMapKey, EiscApiAdvanced bridge)
         {
             var joinMap = new FaderJoinMap(joinStart);
+            if (bridge != null)
+                bridge.AddJoinMap(Key, joinMap);
+
+            trilist.SetBoolSigAction(joinMap.VolumeUp.JoinNumber, VolumeUp);
+            trilist.SetBoolSigAction(joinMap.VolumeDown.JoinNumber, VolumeDown);
+            trilist.SetSigTrueAction(joinMap.MuteOn.JoinNumber, MuteOn);
+            trilist.SetSigTrueAction(joinMap.MuteOff.JoinNumber, MuteOff);
+            trilist.SetSigTrueAction(joinMap.MuteToggle.JoinNumber, MuteToggle);
+            trilist.SetUShortSigAction(joinMap.Volume.JoinNumber, SetVolume);
+
+            VolumeLevelFeedback.LinkInputSig(trilist.UShortInput[joinMap.Volume.JoinNumber]);
+            MuteFeedback.LinkInputSig(trilist.BooleanInput[joinMap.MuteOn.JoinNumber]);
+            NameFeedback.LinkInputSig(trilist.StringInput[joinMap.Name.JoinNumber]);
+            ControlTypeFeedback.LinkInputSig(trilist.UShortInput[joinMap.Type.JoinNumber]);
+        }
+
+        public void LinkToApplicationApi(BasicTriList trilist, uint joinStart, string joinMapKey, EiscApiAdvanced bridge)
+        {
+            var joinMap = new FaderApplicationJoinMap(joinStart);
             if (bridge != null)
                 bridge.AddJoinMap(Key, joinMap);
 

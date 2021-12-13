@@ -1,32 +1,37 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using PepperDash.Core;
 
 namespace SymetrixComposerEpi.Utils
 {
     public static class ConfigUtils
     {
-        public static IEnumerable<SymetrixComposerLevelControl> BuildFaders(
+        public static IEnumerable<SymetrixComposerFader> BuildFaders(
             string key,
             DevicePropertiesConfig config,
             IBasicCommunication coms)
         {
+            var result = new List<SymetrixComposerFader>();
             if (config.LevelControlBlocks == null)
-                return new List<SymetrixComposerLevelControl>();
+                return result;
 
-            return from faderConfig in config.LevelControlBlocks.Where(c => !c.Value.Disabled)
-                select new SymetrixComposerLevelControl(key + "-" + faderConfig.Key, faderConfig.Value, coms);
+            foreach (var faderConfig in config.LevelControlBlocks)
+                result.Add(new SymetrixComposerFader(key + "-" + faderConfig.Key, faderConfig.Value, coms));
+
+            return result;
         }
 
         public static IEnumerable<SymetrixComposerDspPreset> BuildPresets(
             string key,
             DevicePropertiesConfig config)
         {
+            var result = new List<SymetrixComposerDspPreset>();
             if (config.Presets == null)
-                return new List<SymetrixComposerDspPreset>();
+                return result;
 
-            return from presetConfig in config.Presets
-                   select new SymetrixComposerDspPreset(key + "-" + presetConfig.Key, presetConfig.Value);
+            foreach (var presetConfig in config.Presets)
+                result.Add(new SymetrixComposerDspPreset(key + "-" + presetConfig.Key, presetConfig.Value));
+
+            return result;
         }
 
         public static IEnumerable<SymetrixComposerDialer> BuildDialers(
@@ -34,11 +39,14 @@ namespace SymetrixComposerEpi.Utils
            DevicePropertiesConfig config,
             IBasicCommunication coms)
         {
+            var result = new List<SymetrixComposerDialer>();
             if (config.DialerControlBlocks == null)
-                return new List<SymetrixComposerDialer>();
+                return result;
 
-            return from dialerConfig in config.DialerControlBlocks
-                   select new SymetrixComposerDialer(key + "-" + dialerConfig.Key, dialerConfig.Value, coms);
+            foreach (var dialerConfig in config.DialerControlBlocks)
+                result.Add(new SymetrixComposerDialer(key + "-" + dialerConfig.Key, dialerConfig.Value, coms));
+
+            return result;
         }
     }
 }

@@ -87,7 +87,11 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\ParsingUtils.cs" />
+    <Compile Include="Factory\SymetrixComposerDeviceFactory.cs" />
+    <Compile Include="JoinMaps\ApplicationJoinMap.cs" />
+    <Compile Include="JoinMaps\DialerJoinMap.cs" />
+    <Compile Include="JoinMaps\FaderApplicationJoinMap.cs" />
+    <Compile Include="Utils\ParsingUtils.cs" />
     <Compile Include="Enums\EKeypadKeys.cs" />
     <Compile Include="SymetrixComposerDialer.cs" />
     <Compile Include="SymetrixComposerDspPreset.cs" />
@@ -101,7 +105,7 @@
     <Compile Include="Config\FaderConfig.cs" />
     <Compile Include="Config\PresetConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SymetrixComposerLevelControl.cs" />
+    <Compile Include="SymetrixComposerFader.cs" />
     <Compile Include="Utils\ConfigUtils.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>

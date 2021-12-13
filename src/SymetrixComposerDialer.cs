@@ -7,6 +7,7 @@ using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Bridges;
 using PepperDash.Essentials.Core.DeviceTypeInterfaces;
 using SymetrixComposerEpi.Config;
+using SymetrixComposerEpi.JoinMaps;
 using SymetrixComposerEpi.Utils;
 
 namespace SymetrixComposerEpi
@@ -133,10 +134,11 @@ namespace SymetrixComposerEpi
         private bool _isIsDnd;
         private string _callerId;
 
-        private readonly SymetrixComposerLevelControl _atcRx;
+        private readonly SymetrixComposerFader _atcRx;
 
         public SymetrixComposerDialer(string key, DialerConfig config, IBasicCommunication coms) : base(key)
         {
+            Debug.Console(1, this, "Building...");
             Coms = coms;
             UnitNumber = config.UnitNumber;
             CardSlot = config.CardSlot;
@@ -167,7 +169,7 @@ namespace SymetrixComposerEpi
             ClearDialstringWhenConnected = config.ClearDialstringWhenConnected;
             DialStringId = config.DialStringId;
 
-            _atcRx = new SymetrixComposerLevelControl(Key + "-AtcRx", new FaderConfig
+            _atcRx = new SymetrixComposerFader(Key + "-AtcRx", new FaderConfig
             {
                 Label = Key + " Rx",
                 LevelControlId = config.RxVolumeId,
@@ -189,6 +191,7 @@ namespace SymetrixComposerEpi
             CallerIdNameFeedback = 
                 new StringFeedback(() => string.Empty);
 
+            Debug.Console(1, this, "Adding myself to the Device Manager");
             DeviceManager.AddDevice(this);
 
             IncomingCallFeedback.OutputChange += (sender, args) =>
@@ -232,9 +235,6 @@ namespace SymetrixComposerEpi
         {
             get { return _atcRx.MuteFeedback; } }
 
-        /// <summary>
-        /// Toggles the do not disturb state
-        /// </summary>
         public void DoNotDisturbToggle()
         {
             if (_isIsDnd)
@@ -248,22 +248,16 @@ namespace SymetrixComposerEpi
 
         }
 
-        /// <summary>
-        /// Sets the do not disturb state on
-        /// </summary>
         public void DoNotDisturbOn()
         {
-            throw new NotImplementedException();
-            // Parent.SendLine(string.Format("csv \"{0}\" 1", Tags.DoNotDisturbTag));
+            var command = FaderUtils.GetStateCommand(DndId, true);
+            Coms.SendText(command);
         }
 
-        /// <summary>
-        /// Sets the do not disturb state off
-        /// </summary>
         public void DoNotDisturbOff()
         {
-            throw new NotImplementedException();
-            // Parent.SendLine(string.Format("csv \"{0}\" 0", Tags.DoNotDisturbTag));
+            var command = FaderUtils.GetStateCommand(DndId, false);
+            Coms.SendText(command);
         }
 
         public void DialPhoneCall(string number)
@@ -272,6 +266,24 @@ namespace SymetrixComposerEpi
                 return;
 
             var command = DialerUtils.GetNumberToDialCommand(number, UnitNumber, DialStringId, CardSlot);
+            Coms.SendText(command);
+        }
+
+        public void AcceptIncomingCall()
+        {
+            if (!_isRinging)
+                return;
+
+            var command = FaderUtils.GetStateCommand(ConnectAndDisconnectId, true);
+            Coms.SendText(command);
+        }
+
+        public void RejectIncomingCall()
+        {
+            if (!_isRinging)
+                return;
+
+            var command = FaderUtils.GetStatePulseCommand(RejectId);
             Coms.SendText(command);
         }
 
@@ -299,6 +311,12 @@ namespace SymetrixComposerEpi
                 .ParseStringToKeypad(digit)
                 .ToList()
                 .ForEach(SendDtmfToPhone);
+        }
+
+        public void SetDialString(string dialString)
+        {
+            _numberToDial = new StringBuilder(dialString);
+            DialStringFeedback.FireUpdate();
         }
 
         public void HandleKeypadPress(EKeypadKeys digit)
@@ -377,7 +395,51 @@ namespace SymetrixComposerEpi
 
         public override void LinkToApi(BasicTriList trilist, uint joinStart, string joinMapKey, EiscApiAdvanced bridge)
         {
-            throw new NotImplementedException();
+            var joinMap = new DialerJoinMap(joinStart);
+            if (bridge != null)
+                bridge.AddJoinMap(Key, joinMap);
+
+            trilist.SetSigTrueAction((joinMap.Keypad0.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Num0));
+            trilist.SetSigTrueAction((joinMap.Keypad1.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Num1));
+            trilist.SetSigTrueAction((joinMap.Keypad2.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Num2));
+            trilist.SetSigTrueAction((joinMap.Keypad3.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Num3));
+            trilist.SetSigTrueAction((joinMap.Keypad4.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Num4));
+            trilist.SetSigTrueAction((joinMap.Keypad5.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Num5));
+            trilist.SetSigTrueAction((joinMap.Keypad6.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Num6));
+            trilist.SetSigTrueAction((joinMap.Keypad7.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Num7));
+            trilist.SetSigTrueAction((joinMap.Keypad8.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Num8));
+            trilist.SetSigTrueAction((joinMap.Keypad9.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Num9));
+            trilist.SetSigTrueAction((joinMap.KeypadStar.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Star));
+            trilist.SetSigTrueAction((joinMap.KeypadPound.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Pound));
+            trilist.SetSigTrueAction((joinMap.KeypadClear.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Clear));
+            trilist.SetSigTrueAction((joinMap.KeypadBackspace.JoinNumber), () => HandleKeypadPress(EKeypadKeys.Backspace));
+            trilist.SetSigTrueAction(joinMap.Dial.JoinNumber, () => DialPhoneCall(_numberToDial.ToString()));
+            trilist.SetStringSigAction(joinMap.DialString.JoinNumber, SetDialString);
+            trilist.SetSigTrueAction(joinMap.DoNotDisturbToggle.JoinNumber, DoNotDisturbToggle);
+            trilist.SetSigTrueAction(joinMap.DoNotDisturbOn.JoinNumber, DoNotDisturbOn);
+            trilist.SetSigTrueAction(joinMap.DoNotDisturbOff.JoinNumber, DoNotDisturbOff);
+            // trilist.SetSigTrueAction(joinMap.AutoAnswerToggle + dialerLineOffset, () => dialer.Value.AutoAnswerToggle());
+            // trilist.SetSigTrueAction(joinMap.AutoAnswerOn + dialerLineOffset, () => dialer.Value.AutoAnswerOn());
+            // trilist.SetSigTrueAction(joinMap.AutoAnswerOff + dialerLineOffset, () => dialer.Value.AutoAnswerOff());
+            trilist.SetSigTrueAction(joinMap.End.JoinNumber, EndPhoneCall);
+            trilist.SetSigTrueAction(joinMap.IncomingCallAccept.JoinNumber, AcceptIncomingCall);
+            trilist.SetSigTrueAction(joinMap.IncomingCallReject.JoinNumber, RejectIncomingCall);
+
+            // from Plugin > to SiMPL
+            DoNotDisturbFeedback.LinkInputSig(trilist.BooleanInput[joinMap.DoNotDisturbToggle.JoinNumber]);
+            DoNotDisturbFeedback.LinkInputSig(trilist.BooleanInput[joinMap.DoNotDisturbOn.JoinNumber]);
+            DoNotDisturbFeedback.LinkComplementInputSig(trilist.BooleanInput[joinMap.DoNotDisturbOff.JoinNumber]);
+
+            // from Plugin > to SiMPL
+            CallerIdNumberFeedback.LinkInputSig(trilist.StringInput[joinMap.CallerIdNumberFeedback.JoinNumber]);
+
+            // from Plugin > to SiMPL
+            PhoneOffHookFeedback.LinkInputSig(trilist.BooleanInput[joinMap.OffHook.JoinNumber]);
+            PhoneOffHookFeedback.LinkComplementInputSig(trilist.BooleanInput[joinMap.OnHook.JoinNumber]);
+            DialStringFeedback.LinkInputSig(trilist.StringInput[joinMap.DialString.JoinNumber]);
+
+            // from Plugin > to SiMPL
+            IncomingCallFeedback.LinkInputSig(trilist.BooleanInput[joinMap.IncomingCall.JoinNumber]);
         }
 
         public void VolumeUp(bool pressRelease)
