@@ -1,12 +1,15 @@
 # PepperDash Plugin - Symetrix Composer
 
-### DSP Configuraton
+## Notes
+1. Tested on-site with a Symetrix Radius NX 12x8 using TCP/IP control.
+2. Unit tested did not implement a phone dialer (VoIP or POTS), currently this portion of the plugin is untested.
 
-Available Control Methods
+### DSP Control Methods Supported
 ```json
-tcpip
-com
+"method": "com",
+"method": "tcpip"
 ```
+### DSP Configuraton
 
 ```json
 {
