@@ -1,6 +1,6 @@
 using PepperDash.Essentials.Core;
 
-namespace SymetrixComposerEpi.JoinMaps
+namespace PepperDashPluginSymetrixComposer.JoinMaps
 {
     public class DialerJoinMap : JoinMapBaseAdvanced
     {

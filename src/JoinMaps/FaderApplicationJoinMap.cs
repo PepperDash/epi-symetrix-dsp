@@ -1,7 +1,10 @@
 using PepperDash.Essentials.Core;
 
-namespace SymetrixComposerEpi.JoinMaps
+namespace PepperDashPluginSymetrixComposer.JoinMaps
 {
+    /// <summary>
+    /// Join map for single EISC bridge instance
+    /// </summary>
     public class FaderApplicationJoinMap : JoinMapBaseAdvanced
     {
         #region Digital
@@ -103,10 +106,25 @@ namespace SymetrixComposerEpi.JoinMaps
             },
             new JoinMetadata()
             {
-                Description = "Type",
+                Description = "Fader mute type, level mute (0) or mic mute (1)",
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
                 JoinType = eJoinType.Analog,
                 ValidValues = new[] {"0", "1"},
+            });
+
+        [JoinName("Permissions")]
+        public JoinDataComplete Permissions = new JoinDataComplete(
+            new JoinData()
+            {
+                JoinNumber = 601,
+                JoinSpan = 1
+            },
+            new JoinMetadata()
+            {
+                Description = "Fader permissions, user & tech accessible (0), user only (1), tech only (2)",
+                JoinCapabilities = eJoinCapabilities.ToSIMPL,
+                JoinType = eJoinType.Analog,
+                ValidValues = new[] { "0", "1", "2" },
             });
 
         #endregion

@@ -1,20 +1,25 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using Crestron.SimplSharpPro.DeviceSupport;
 using PepperDash.Core;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Bridges;
 using PepperDash.Essentials.Core.DeviceTypeInterfaces;
-using SymetrixComposerEpi.Config;
-using SymetrixComposerEpi.JoinMaps;
-using SymetrixComposerEpi.Utils;
+using PepperDashPluginSymetrixComposer.Config;
+using PepperDashPluginSymetrixComposer.Enums;
+using PepperDashPluginSymetrixComposer.JoinMaps;
+using PepperDashPluginSymetrixComposer.Utils;
 
-namespace SymetrixComposerEpi
+namespace PepperDashPluginSymetrixComposer
 {
-    // Todo: Add IOnline
     public class SymetrixComposerDialer : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasPhoneDialing, IOnline
     {
+        private const int DebugLevel1 = 1;
+        private const int DebugLevel2 = 2;
+
+        /// <summary>
+        /// Caller ID
+        /// </summary>
         public string CallerId
         {
             set
@@ -24,6 +29,9 @@ namespace SymetrixComposerEpi
             }
         }
 
+        /// <summary>
+        /// Incoming call
+        /// </summary>
         public bool IsRinging
         {
             set
@@ -34,6 +42,9 @@ namespace SymetrixComposerEpi
             }
         }
 
+        /// <summary>
+        /// Call is connected
+        /// </summary>
         public bool IsConnected
         {
             set
@@ -44,6 +55,9 @@ namespace SymetrixComposerEpi
             }
         }
 
+        /// <summary>
+        /// Call is on hold
+        /// </summary>
         public bool IsOnHold
         {
             set
@@ -54,6 +68,9 @@ namespace SymetrixComposerEpi
             }
         }
 
+        /// <summary>
+        /// Is busy
+        /// </summary>
         public bool IsBusy
         {
             set
@@ -64,6 +81,9 @@ namespace SymetrixComposerEpi
             }
         }
 
+        /// <summary>
+        /// Dialing 
+        /// </summary>
         public bool IsDialing
         {
             set
@@ -74,6 +94,9 @@ namespace SymetrixComposerEpi
             }
         }
 
+        /// <summary>
+        /// Do not disturb
+        /// </summary>
         public bool IsInDnd
         {
             set
@@ -84,10 +107,24 @@ namespace SymetrixComposerEpi
             }
         }
 
+        /// <summary>
+        /// Off hook feedback
+        /// </summary>
         public BoolFeedback PhoneOffHookFeedback { get; private set; }
+
+        /// <summary>
+        /// Caller ID name feedback
+        /// </summary>
         public StringFeedback CallerIdNameFeedback { get; private set; }
+
+        /// <summary>
+        /// Caller ID number feedback
+        /// </summary>
         public StringFeedback CallerIdNumberFeedback { get; private set; }
 
+        /// <summary>
+        /// Communication object
+        /// </summary>
         public readonly IBasicCommunication Coms;
 
         public readonly bool ClearDialstringWhenConnected;
@@ -136,9 +173,15 @@ namespace SymetrixComposerEpi
 
         private readonly SymetrixComposerFader _atcRx;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="config"></param>
+        /// <param name="coms"></param>
         public SymetrixComposerDialer(string key, DialerConfig config, IBasicCommunication coms) : base(key)
         {
-            Debug.Console(1, this, "Building...");
+            Debug.Console(DebugLevel1, this, "Building...");
             Coms = coms;
             UnitNumber = config.UnitNumber;
             CardSlot = config.CardSlot;
@@ -174,7 +217,7 @@ namespace SymetrixComposerEpi
                 Label = Key + " Rx",
                 LevelControlId = config.RxVolumeId,
                 MuteControlId = config.RxMuteId,
-                UserMaximim = config.RxUserMaximum,
+                UserMaximum = config.RxUserMaximum,
                 UserMinimum = config.RxUserMinimum,
             }, Coms);
 
@@ -191,7 +234,7 @@ namespace SymetrixComposerEpi
             CallerIdNameFeedback = 
                 new StringFeedback(() => string.Empty);
 
-            Debug.Console(1, this, "Adding myself to the Device Manager");
+            Debug.Console(DebugLevel1, this, "Adding myself to the Device Manager");
             DeviceManager.AddDevice(this);
 
             IncomingCallFeedback.OutputChange += (sender, args) =>

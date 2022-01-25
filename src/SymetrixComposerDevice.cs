@@ -8,11 +8,12 @@ using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Bridges;
 using PepperDash.Essentials.Core.Config;
 using PepperDash.Essentials.Core.Devices;
-using SymetrixComposerEpi.JoinMaps;
-using SymetrixComposerEpi.Utils;
+using PepperDashPluginSymetrixComposer.Config;
+using PepperDashPluginSymetrixComposer.JoinMaps;
+using PepperDashPluginSymetrixComposer.Utils;
 using Feedback = PepperDash.Essentials.Core.Feedback;
 
-namespace SymetrixComposerEpi
+namespace PepperDashPluginSymetrixComposer
 {
     public class SymetrixComposerDevice : ReconfigurableBridgableDevice,
         ICommunicationMonitor,
@@ -20,6 +21,9 @@ namespace SymetrixComposerEpi
         IHasFeedback,
         IOnline
     {
+        private const int DebugLevel1 = 1;
+        private const int DebugLevel2 = 2;
+
         public readonly IBasicCommunication Coms;
         public readonly CommunicationGather PortGather;
         public readonly IEnumerable<SymetrixComposerFader> Faders;
@@ -38,7 +42,8 @@ namespace SymetrixComposerEpi
             IBasicCommunication coms,
             IEnumerable<SymetrixComposerFader> faders,
             IEnumerable<SymetrixComposerDialer> dialers,
-            IEnumerable<SymetrixComposerDspPreset> presets) : base(config)
+            IEnumerable<SymetrixComposerDspPreset> presets)
+            : base(config)
         {
             Coms = coms;
             Faders = faders;
@@ -57,48 +62,57 @@ namespace SymetrixComposerEpi
                     Coms.SendText("PUR\r");
             };
 
-            Debug.Console(1, this, "Device created");
+            Debug.Console(DebugLevel1, this, "Device created");
 
-            DeviceManager.AllDevicesActivated += (sender, args) => CrestronInvoke.BeginInvoke(o => Coms.Connect());
+            DeviceManager.AllDevicesActivated += (sender, args) =>
+            {
+                CrestronInvoke.BeginInvoke(o => CommunicationMonitor.Start());
+                CrestronInvoke.BeginInvoke(o => Coms.Connect());
+            };
         }
 
         private void PortGatherOnLineReceived(object sender, GenericCommMethodReceiveTextArgs args)
         {
             var response = args.Text;
+            Debug.Console(DebugLevel2, "PortGatherOnLineReceived: response = {0}", response);
+
             try
             {
                 if (response.StartsWith("#"))
                 {
                     var controllerId = ParsingUtils.ParseControllerId(response);
+                    Debug.Console(DebugLevel2, "PortGatherOnLineReceived: controllerId = {0}", controllerId);
                     if (controllerId == 0)
                         return;
-
-                    var cleanedResponse = ParsingUtils.CleanResponse(response);
 
                     Faders
                         .Where(f => f.VolumeControllerId == controllerId)
                         .ToList()
-                        .ForEach(FaderUtils.UpdateVolumeControllerPosition(cleanedResponse));
+                        .ForEach(FaderUtils.UpdateVolumeControllerPosition(response));
 
                     Faders
-                        .Where(f => f.MuteControllerId == controllerId)
+                        .Where(m => m.MuteControllerId == controllerId)
                         .ToList()
-                        .ForEach(FaderUtils.UpdateMuteControllerPosition(cleanedResponse));
+                        .ForEach(FaderUtils.UpdateMuteControllerPosition(response));
 
+                    // TODO [ ] Verify dialer feedback
                     Dialers
                         .Where(d => d.HasControllerId(controllerId))
                         .ToList()
-                        .ForEach(DialerUtils.ParseAndUpdateDialerState(cleanedResponse, controllerId));
+                        .ForEach(DialerUtils.ParseAndUpdateDialerState(response, controllerId));
                 }
 
+                // TODO [ ] Verify dialer feedback
                 if (response.StartsWith("GSSYS"))
                 {
+                    throw new NotImplementedException("[Symetrix DSP] Dialer GSSYS feedback processing not implemented");
                 }
             }
             catch (Exception ex)
             {
-                Debug.Console(
-                    1, this, Debug.ErrorLogLevel.Notice, "Error parsing response:{0} | {1}", response, ex.Message);
+                Debug.Console(DebugLevel1, this, Debug.ErrorLogLevel.Notice, "Exception Message: {0}", ex.Message);
+                Debug.Console(DebugLevel2, this, Debug.ErrorLogLevel.Notice, "Exception Stack Trace: {0}", ex.StackTrace);
+                if (ex.InnerException != null) Debug.Console(DebugLevel1, this, Debug.ErrorLogLevel.Notice, "Inner Exception: {0}", ex.InnerException);
             }
         }
 
@@ -128,13 +142,13 @@ namespace SymetrixComposerEpi
             for (uint x = 0; x < Faders.Count(); ++x)
             {
                 var join = faderJoinStart + joinStart + x;
-                var fader = Faders.ElementAt((int) x);
+                var fader = Faders.ElementAt((int)x);
                 fader.LinkToApplicationApi(trilist, join, joinMapKey, bridge);
             }
 
             for (uint x = 0; x < PresetsImpl.Count(); ++x)
             {
-                var preset = PresetsImpl.ElementAt((int) x);
+                var preset = PresetsImpl.ElementAt((int)x);
                 trilist.SetSigTrueAction(joinMap.PresetRecall.JoinNumber + x, () => RecallPreset(preset));
                 var fb = new StringFeedback(() => preset.Name);
                 fb.LinkInputSig(trilist.StringInput[joinMap.PresetRecall.JoinNumber + x]);
@@ -144,7 +158,7 @@ namespace SymetrixComposerEpi
             const uint dialerJoinStart = 3100;
             for (uint x = 0; x < Dialers.Count(); ++x)
             {
-                var dialer = Dialers.ElementAt((int) x);
+                var dialer = Dialers.ElementAt((int)x);
                 var join = dialerJoinStart + joinStart + (x * 50);
                 dialer.LinkToApi(trilist, join, joinMapKey, bridge);
             }
