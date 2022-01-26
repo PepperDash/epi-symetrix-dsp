@@ -91,10 +91,12 @@ namespace PepperDashPluginSymetrixComposer
             MuteControllerId = config.MuteControlId;
             IsMic = config.IsMic;
             UnmuteOnVolumeChange = config.UnmuteOnVolChange;
-            UserMinumum = config.UserMinimum ?? DefaultFaderMinimum;
-            UserMaximum = config.UserMaximum ?? DefaultFaderMaximum;
+            // if configured, set the fader min/max.  this changes based on the DSP object used
             FaderMinumum = config.FaderMinimum ?? DefaultFaderMinimum;
             FaderMaximum = config.FaderMaximum ?? DefaultFaderMaximum;
+            // if not configured, use the fader min/max
+            UserMinumum = config.UserMinimum ?? FaderMinumum;
+            UserMaximum = config.UserMaximum ?? FaderMaximum;
             Increment = config.Increment ?? DefaultIncrement;
             Permissions = config.Permissions ?? DefaultPermissions;
             Coms = coms;
