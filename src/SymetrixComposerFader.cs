@@ -85,7 +85,7 @@ namespace PepperDashPluginSymetrixComposer
             : base(key, config.Label)
         {
             Key = key;
-            Debug.Console(DebugLevel1, this, "Building...");
+            Debug.Console(DebugLevel2, this, "Building...");
             Name = config.Label;
             VolumeControllerId = config.LevelControlId;
             MuteControllerId = config.MuteControlId;
@@ -106,7 +106,7 @@ namespace PepperDashPluginSymetrixComposer
             ControlTypeFeedback = new IntFeedback(() => config.IsMic ? MicrophoneType : SpeakerType);
             PermissionsFeedback = new IntFeedback(() => config.Permissions ?? DefaultPermissions);
 
-            Debug.Console(DebugLevel1, this, "Adding myself to the Device Manager");
+            Debug.Console(DebugLevel2, this, "Adding myself to the Device Manager");
             DeviceManager.AddDevice(this);
         }
 
