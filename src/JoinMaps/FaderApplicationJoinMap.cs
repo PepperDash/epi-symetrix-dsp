@@ -11,12 +11,12 @@ namespace PepperDashPluginSymetrixComposer.JoinMaps
 
         [JoinName("MuteToggle")]
         public JoinDataComplete MuteToggle = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 201,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Mute Toggle",
                 JoinCapabilities = eJoinCapabilities.ToFromSIMPL,
@@ -25,12 +25,12 @@ namespace PepperDashPluginSymetrixComposer.JoinMaps
 
         [JoinName("MuteOn")]
         public JoinDataComplete MuteOn = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 401,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Mute On",
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
@@ -39,12 +39,12 @@ namespace PepperDashPluginSymetrixComposer.JoinMaps
 
         [JoinName("MuteOff")]
         public JoinDataComplete MuteOff = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 601,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Mute Off",
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
@@ -53,12 +53,12 @@ namespace PepperDashPluginSymetrixComposer.JoinMaps
 
         [JoinName("VolumeUp")]
         public JoinDataComplete VolumeUp = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 801,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Volume Up",
                 JoinCapabilities = eJoinCapabilities.FromSIMPL,
@@ -67,12 +67,12 @@ namespace PepperDashPluginSymetrixComposer.JoinMaps
 
         [JoinName("VolumeDown")]
         public JoinDataComplete VolumeDown = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 1001,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Volume Down",
                 JoinCapabilities = eJoinCapabilities.FromSIMPL,
@@ -85,26 +85,28 @@ namespace PepperDashPluginSymetrixComposer.JoinMaps
 
         [JoinName("Volume")]
         public JoinDataComplete Volume = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 1,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Volume",
                 JoinCapabilities = eJoinCapabilities.ToFromSIMPL,
                 JoinType = eJoinType.Analog
             });
 
-        [JoinName("Type")]
+
+        [JoinName("MuteIcon")]
         public JoinDataComplete Type = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
+                // +200 offset applied in SymetrixComposerDevice.LinkToApi
                 JoinNumber = 201,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Fader mute type, level mute (0) or mic mute (1)",
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
@@ -112,19 +114,34 @@ namespace PepperDashPluginSymetrixComposer.JoinMaps
                 ValidValues = new[] {"0", "1"},
             });
 
+        [JoinName("FaderControls")]
+        public JoinDataComplete FaderControls = new JoinDataComplete(
+            new JoinData
+            {
+                // +200 offset applied in SymetrixComposerDevice.LinkToApi
+                JoinNumber = 401,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "Fader controls, level & mute (0), level only (1), mute only (2)",
+                JoinCapabilities = eJoinCapabilities.ToSIMPL,
+                JoinType = eJoinType.Analog
+            });
+
         [JoinName("Permissions")]
         public JoinDataComplete Permissions = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
+                // +200 offset applied in SymetrixComposerDevice.LinkToApi
                 JoinNumber = 601,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Fader permissions, user & tech accessible (0), user only (1), tech only (2)",
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
-                JoinType = eJoinType.Analog,
-                ValidValues = new[] { "0", "1", "2" },
+                JoinType = eJoinType.Analog
             });
 
         #endregion
@@ -134,12 +151,12 @@ namespace PepperDashPluginSymetrixComposer.JoinMaps
 
         [JoinName("Name")]
         public JoinDataComplete Name = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 1,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Name",
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,

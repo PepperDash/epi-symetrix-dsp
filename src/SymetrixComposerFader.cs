@@ -19,18 +19,25 @@ namespace PepperDashPluginSymetrixComposer
         public const int DefaultFaderMinimum = -72;
         public const int DefaultFaderMaximum = 12;
         public const int DefaultIncrement = 2;
-        public const int DefaultPermissions = 0;
-        public const int SpeakerType = 0;
-        public const int MicrophoneType = 1;
-        public const int PermissionsAll = 0;
-        public const int PermissionsUserOnly = 1;
-        public const int PermissionsTechOnly = 2;
 
+        public const int DefaultPermissions = 0;
+        private const int PermissionsAll = 0;
+        private const int PermissionsUserOnly = 1;
+        private const int PermissionsTechOnly = 2;
+
+        public const int MuteIconSpeaker = 0;
+        public const int MuteIconMic = 1;
+
+        private const int FaderControlsLevelAndMute = 0;
+        private const int FaderControlsLevelOnly = 1;
+        private const int FaderControlsMuteOnly = 2;
+        
         public readonly int UserMinumum;
         public readonly int UserMaximum;
         public readonly int FaderMinumum;
         public readonly int FaderMaximum;
         public readonly int Increment;
+        public readonly int FaderControls;
         public readonly int Permissions;
         public readonly int VolumeControllerId;
         public readonly int MuteControllerId;
@@ -38,8 +45,9 @@ namespace PepperDashPluginSymetrixComposer
         public readonly bool IsMic;
         public readonly bool UnmuteOnVolumeChange;
         public readonly StringFeedback NameFeedback;
-        public readonly IntFeedback ControlTypeFeedback;
+        public readonly IntFeedback MuteIconFeedback;
         public readonly IntFeedback PermissionsFeedback;
+        public readonly IntFeedback FaderControlsFeedback;
 
         private bool _isMuted;
         private ushort _volume;
@@ -87,24 +95,44 @@ namespace PepperDashPluginSymetrixComposer
             Key = key;
             Debug.Console(DebugLevel2, this, "Building...");
             Name = config.Label;
+            
             VolumeControllerId = config.LevelControlId;
             MuteControllerId = config.MuteControlId;
             IsMic = config.IsMic;
             UnmuteOnVolumeChange = config.UnmuteOnVolChange;
+            
             // if configured, set the fader min/max.  this changes based on the DSP object used
             FaderMinumum = config.FaderMinimum ?? DefaultFaderMinimum;
             FaderMaximum = config.FaderMaximum ?? DefaultFaderMaximum;
+            
             // if not configured, use the fader min/max
             UserMinumum = config.UserMinimum ?? FaderMinumum;
             UserMaximum = config.UserMaximum ?? FaderMaximum;
             Increment = config.Increment ?? DefaultIncrement;
+
+            if (config.HasLevel && !config.HasMute)
+            {
+                FaderControls = FaderControlsLevelOnly;
+            }
+            else if(!config.HasLevel && config.HasMute)
+            {
+                FaderControls = FaderControlsMuteOnly;
+            }
+            else
+            {
+                FaderControls = FaderControlsLevelAndMute;
+            }
+           
             Permissions = config.Permissions ?? DefaultPermissions;
+            
             Coms = coms;
+            
             MuteFeedback = new BoolFeedback(Key + "-Mute", () => IsMuted);
             VolumeLevelFeedback = new IntFeedback(Key + "-Volume", () => Volume);
             NameFeedback = new StringFeedback(() => Name);
-            ControlTypeFeedback = new IntFeedback(() => config.IsMic ? MicrophoneType : SpeakerType);
-            PermissionsFeedback = new IntFeedback(() => config.Permissions ?? DefaultPermissions);
+            MuteIconFeedback = new IntFeedback(() => IsMic ? MuteIconMic : MuteIconSpeaker);
+            PermissionsFeedback = new IntFeedback(() => Permissions);
+            FaderControlsFeedback = new IntFeedback(() => FaderControls);
 
             Debug.Console(DebugLevel2, this, "Adding myself to the Device Manager");
             DeviceManager.AddDevice(this);
@@ -121,7 +149,8 @@ namespace PepperDashPluginSymetrixComposer
                 VolumeLevelFeedback,
                 MuteFeedback,
                 NameFeedback,
-                ControlTypeFeedback,
+                MuteIconFeedback,
+                FaderControlsFeedback,
                 PermissionsFeedback
             };
 
@@ -313,7 +342,8 @@ namespace PepperDashPluginSymetrixComposer
             VolumeLevelFeedback.LinkInputSig(trilist.UShortInput[joinMap.Volume.JoinNumber]);
             MuteFeedback.LinkInputSig(trilist.BooleanInput[joinMap.MuteOn.JoinNumber]);
             NameFeedback.LinkInputSig(trilist.StringInput[joinMap.Name.JoinNumber]);
-            ControlTypeFeedback.LinkInputSig(trilist.UShortInput[joinMap.Type.JoinNumber]);
+            MuteIconFeedback.LinkInputSig(trilist.UShortInput[joinMap.MuteIcon.JoinNumber]);
+            FaderControlsFeedback.LinkInputSig(trilist.UShortInput[joinMap.FaderControls.JoinNumber]);
             PermissionsFeedback.LinkInputSig(trilist.UShortInput[joinMap.Permissions.JoinNumber]);
         }
 
@@ -340,7 +370,8 @@ namespace PepperDashPluginSymetrixComposer
             VolumeLevelFeedback.LinkInputSig(trilist.UShortInput[joinMap.Volume.JoinNumber]);
             MuteFeedback.LinkInputSig(trilist.BooleanInput[joinMap.MuteOn.JoinNumber]);
             NameFeedback.LinkInputSig(trilist.StringInput[joinMap.Name.JoinNumber]);
-            ControlTypeFeedback.LinkInputSig(trilist.UShortInput[joinMap.Type.JoinNumber]);
+            MuteIconFeedback.LinkInputSig(trilist.UShortInput[joinMap.Type.JoinNumber]);
+            FaderControlsFeedback.LinkInputSig(trilist.UShortInput[joinMap.FaderControls.JoinNumber]); 
             PermissionsFeedback.LinkInputSig(trilist.UShortInput[joinMap.Permissions.JoinNumber]);
         }
 

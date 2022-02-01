@@ -38,10 +38,16 @@ namespace PepperDashPluginSymetrixComposer.Config
         public int? Increment { get; set; }
 
         /// <summary>
-        /// Sets the fader mute type, level mute (0) or mic mute (1)
+        /// Fader has level controls
         /// </summary>
-        [JsonProperty("type")]
-        public int? Type { get; set; }
+        [JsonProperty("hasLevel")]
+        public bool HasLevel { get; set; }
+
+        /// <summary>
+        /// Fader has mute controls
+        /// </summary>
+        [JsonProperty("hasMute")]
+        public bool HasMute { get; set; }
 
         /// <summary>
         /// Sets the fader permissions, 0d = User & Tech, 1d = User only, 2d = Tech only

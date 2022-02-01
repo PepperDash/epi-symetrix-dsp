@@ -91,8 +91,8 @@ namespace PepperDashPluginSymetrixComposer.JoinMaps
                 Description = "Volume"
             });
 
-        [JoinName("Type")] 
-        public JoinDataComplete Type = new JoinDataComplete(
+        [JoinName("MuteIcon")] 
+        public JoinDataComplete MuteIcon = new JoinDataComplete(
             new JoinData
             {
                 JoinNumber = 2,
@@ -102,23 +102,36 @@ namespace PepperDashPluginSymetrixComposer.JoinMaps
             {
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
                 JoinType = eJoinType.Analog,
-                Description = "Fader mute type, level mute (0) or mic mute (1)",
+                Description = "Mute Icon sets the fader mute icon, level mute (0) or mic mute (1)",
                 ValidValues = new[] {"0", "1"},
             });
 
-        [JoinName("Permissions")]
-        public JoinDataComplete Permissions = new JoinDataComplete(
-            new JoinData()
+        [JoinName("FaderControls")]
+        public JoinDataComplete FaderControls = new JoinDataComplete(
+            new JoinData
             {
                 JoinNumber = 3,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
+            {
+                Description = "Fader controls, level & mute (0), level only (1), mute only (2)",
+                JoinCapabilities = eJoinCapabilities.ToSIMPL,
+                JoinType = eJoinType.Analog
+            });
+
+        [JoinName("Permissions")]
+        public JoinDataComplete Permissions = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 4,
+                JoinSpan = 1
+            },
+            new JoinMetadata
             {
                 Description = "Fader permissions, user & tech accessible (0), user only (1), tech only (2)",
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
-                JoinType = eJoinType.Analog,
-                ValidValues = new[] { "0", "1", "2" },
+                JoinType = eJoinType.Analog
             });
 
         [JoinName("Name")] 
