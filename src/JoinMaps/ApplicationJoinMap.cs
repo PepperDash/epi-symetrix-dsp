@@ -1,17 +1,17 @@
 using PepperDash.Essentials.Core;
 
-namespace SymetrixComposerEpi.JoinMaps
+namespace PepperDashPluginSymetrixComposer.JoinMaps
 {
     public class ApplicationJoinMap : JoinMapBaseAdvanced
     {
         [JoinName("IsOnline")]
         public JoinDataComplete IsOnline = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 1,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Is Online",
                 JoinCapabilities = eJoinCapabilities.FromSIMPL,
@@ -20,12 +20,12 @@ namespace SymetrixComposerEpi.JoinMaps
 
         [JoinName("PresetRecallDiscrete")]
         public JoinDataComplete PresetRecallDiscrete = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 100,
                 JoinSpan = 1
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Preset Recall Discrete",
                 JoinCapabilities = eJoinCapabilities.FromSIMPL,
@@ -34,12 +34,12 @@ namespace SymetrixComposerEpi.JoinMaps
 
         [JoinName("PresetRecall")]
         public JoinDataComplete PresetRecall = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 101,
                 JoinSpan = 100
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Preset Recall",
                 JoinCapabilities = eJoinCapabilities.FromSIMPL,
@@ -48,12 +48,12 @@ namespace SymetrixComposerEpi.JoinMaps
 
         [JoinName("PresetName")]
         public JoinDataComplete PresetName = new JoinDataComplete(
-            new JoinData()
+            new JoinData
             {
                 JoinNumber = 101,
                 JoinSpan = 100
             },
-            new JoinMetadata()
+            new JoinMetadata
             {
                 Description = "Preset Name",
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,

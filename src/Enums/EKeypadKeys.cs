@@ -1,4 +1,4 @@
-namespace SymetrixComposerEpi
+namespace PepperDashPluginSymetrixComposer.Enums
 {
     public enum EKeypadKeys
     {

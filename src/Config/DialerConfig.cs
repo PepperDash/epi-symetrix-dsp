@@ -1,4 +1,4 @@
-﻿namespace SymetrixComposerEpi.Config
+﻿namespace PepperDashPluginSymetrixComposer.Config
 {
     public class DialerConfig
     {

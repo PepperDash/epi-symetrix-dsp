@@ -1,10 +1,14 @@
 using PepperDash.Essentials.Core;
 
-namespace SymetrixComposerEpi.JoinMaps
+namespace PepperDashPluginSymetrixComposer.JoinMaps
 {
+    /// <summary>
+    /// Join map for individual faders
+    /// </summary>
     public class FaderJoinMap : JoinMapBaseAdvanced
     {
-        [JoinName("Volume Up")] public JoinDataComplete VolumeUp = new JoinDataComplete(
+        [JoinName("Volume Up")] 
+        public JoinDataComplete VolumeUp = new JoinDataComplete(
             new JoinData
             {
                 JoinNumber = 1,
@@ -17,7 +21,8 @@ namespace SymetrixComposerEpi.JoinMaps
                 Description = "Volume Up"
             });
 
-        [JoinName("Volume Down")] public JoinDataComplete VolumeDown = new JoinDataComplete(
+        [JoinName("Volume Down")] 
+        public JoinDataComplete VolumeDown = new JoinDataComplete(
             new JoinData
             {
                 JoinNumber = 2,
@@ -30,7 +35,8 @@ namespace SymetrixComposerEpi.JoinMaps
                 Description = "Volume Down"
             });
 
-        [JoinName("Mute On")] public JoinDataComplete MuteOn = new JoinDataComplete(
+        [JoinName("Mute On")] 
+        public JoinDataComplete MuteOn = new JoinDataComplete(
             new JoinData
             {
                 JoinNumber = 3,
@@ -43,7 +49,8 @@ namespace SymetrixComposerEpi.JoinMaps
                 Description = "Mute On"
             });
 
-        [JoinName("Mute Off")] public JoinDataComplete MuteOff = new JoinDataComplete(
+        [JoinName("Mute Off")] 
+        public JoinDataComplete MuteOff = new JoinDataComplete(
             new JoinData
             {
                 JoinNumber = 4,
@@ -56,7 +63,8 @@ namespace SymetrixComposerEpi.JoinMaps
                 Description = "Mute Off"
             });
 
-        [JoinName("Mute Toggle")] public JoinDataComplete MuteToggle = new JoinDataComplete(
+        [JoinName("Mute Toggle")] 
+        public JoinDataComplete MuteToggle = new JoinDataComplete(
             new JoinData
             {
                 JoinNumber = 5,
@@ -69,7 +77,8 @@ namespace SymetrixComposerEpi.JoinMaps
                 Description = "Mute Toggle"
             });
 
-        [JoinName("Volume")] public JoinDataComplete Volume = new JoinDataComplete(
+        [JoinName("Volume")] 
+        public JoinDataComplete Volume = new JoinDataComplete(
             new JoinData
             {
                 JoinNumber = 1,
@@ -82,7 +91,8 @@ namespace SymetrixComposerEpi.JoinMaps
                 Description = "Volume"
             });
 
-        [JoinName("Type")] public JoinDataComplete Type = new JoinDataComplete(
+        [JoinName("MuteIcon")] 
+        public JoinDataComplete MuteIcon = new JoinDataComplete(
             new JoinData
             {
                 JoinNumber = 2,
@@ -92,11 +102,40 @@ namespace SymetrixComposerEpi.JoinMaps
             {
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
                 JoinType = eJoinType.Analog,
-                Description = "Type",
+                Description = "Mute Icon sets the fader mute icon, level mute (0) or mic mute (1)",
                 ValidValues = new[] {"0", "1"},
             });
 
-        [JoinName("Name")] public JoinDataComplete Name = new JoinDataComplete(
+        [JoinName("FaderControls")]
+        public JoinDataComplete FaderControls = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 3,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "Fader controls, level & mute (0), level only (1), mute only (2)",
+                JoinCapabilities = eJoinCapabilities.ToSIMPL,
+                JoinType = eJoinType.Analog
+            });
+
+        [JoinName("Permissions")]
+        public JoinDataComplete Permissions = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 4,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "Fader permissions, user & tech accessible (0), user only (1), tech only (2)",
+                JoinCapabilities = eJoinCapabilities.ToSIMPL,
+                JoinType = eJoinType.Analog
+            });
+
+        [JoinName("Name")] 
+        public JoinDataComplete Name = new JoinDataComplete(
             new JoinData
             {
                 JoinNumber = 1,

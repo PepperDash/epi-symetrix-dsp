@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("SymetrixComposerEpi")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SymetrixComposerEpi")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyTitle("PepperDashPluginSymetrixComposer")]
+[assembly: AssemblyCompany("PepperDash")]
+[assembly: AssemblyProduct("PepperDashPluginSymetrixComposer")]
+[assembly: AssemblyCopyright("Copyright © 2022")]
 [assembly: AssemblyVersion("1.0.0.*")]
 

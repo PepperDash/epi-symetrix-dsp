@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using PepperDash.Core;
 using PepperDash.Essentials.Core;
-using SymetrixComposerEpi.Config;
 
-namespace SymetrixComposerEpi
+namespace PepperDashPluginSymetrixComposer.Config
 {
     public class DevicePropertiesConfig
     {

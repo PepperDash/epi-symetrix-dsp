@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Config;
-using SymetrixComposerEpi.Utils;
+using PepperDashPluginSymetrixComposer.Config;
+using PepperDashPluginSymetrixComposer.Utils;
 
-namespace SymetrixComposerEpi.Factory
+namespace PepperDashPluginSymetrixComposer.Factory
 {
     public class SymetrixComposerDeviceFactory : EssentialsPluginDeviceFactory<SymetrixComposerDevice>
     {

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using PepperDash.Core;
+using PepperDashPluginSymetrixComposer.Config;
 
-namespace SymetrixComposerEpi.Utils
+namespace PepperDashPluginSymetrixComposer.Utils
 {
     public static class ConfigUtils
     {
