@@ -357,3 +357,4 @@ MigrationBackup/
 # Build output
 output/
 packages/
+.nuget/
