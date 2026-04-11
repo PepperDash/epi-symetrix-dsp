@@ -3,7 +3,11 @@ using PepperDashPluginSymetrixComposer.Config;
 
 namespace PepperDashPluginSymetrixComposer
 {
+#if SERIES4
+    public class SymetrixComposerDspPreset : EssentialsDevice
+#else
     public class SymetrixComposerDspPreset : EssentialsDevice, IDspPreset
+#endif
     {
         /// <summary>
         /// Preset number, ex. 'LP {PRESET_NUMBER}\r'

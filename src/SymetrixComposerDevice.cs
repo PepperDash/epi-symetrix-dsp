@@ -17,7 +17,11 @@ namespace PepperDashPluginSymetrixComposer
 {
     public class SymetrixComposerDevice : ReconfigurableBridgableDevice,
         ICommunicationMonitor,
+#if !SERIES4
         IHasDspPresets,
+#else
+        IDspPresets,
+#endif
         IHasFeedback,
         IOnline
     {
@@ -129,14 +133,14 @@ namespace PepperDashPluginSymetrixComposer
                 value => PresetsImpl
                     .Where(x => x.PresetNumber == value)
                     .ToList()
-                    .ForEach(RecallPreset));
+                    .ForEach(RecallPresetInternal));
 
             trilist.SetStringSigAction(
                 joinMap.PresetRecallDiscrete.JoinNumber,
                 value => PresetsImpl
                     .Where(x => x.Key.Equals(value, StringComparison.OrdinalIgnoreCase))
                     .ToList()
-                    .ForEach(RecallPreset));
+                    .ForEach(RecallPresetInternal));
 
             const uint faderJoinStart = 200;
             for (uint x = 0; x < Faders.Count(); ++x)
@@ -149,7 +153,7 @@ namespace PepperDashPluginSymetrixComposer
             for (uint x = 0; x < PresetsImpl.Count(); ++x)
             {
                 var preset = PresetsImpl.ElementAt((int)x);
-                trilist.SetSigTrueAction(joinMap.PresetRecall.JoinNumber + x, () => RecallPreset(preset));
+                trilist.SetSigTrueAction(joinMap.PresetRecall.JoinNumber + x, () => RecallPresetInternal(preset));
                 var fb = new StringFeedback(() => preset.Name);
                 fb.LinkInputSig(trilist.StringInput[joinMap.PresetRecall.JoinNumber + x]);
                 fb.FireUpdate();
@@ -166,17 +170,43 @@ namespace PepperDashPluginSymetrixComposer
 
         public StatusMonitorBase CommunicationMonitor { get; private set; }
 
+        private void RecallPresetInternal(SymetrixComposerDspPreset preset)
+        {
+            var command = SymetrixComposerDspPreset.GetPresetCommand(preset.PresetNumber);
+            Coms.SendText(command);
+        }
+
+#if SERIES4
+        public void RecallPreset(string key)
+        {
+            var preset = PresetsImpl.FirstOrDefault(p => p.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
+            if (preset == null)
+                return;
+
+            RecallPresetInternal(preset);
+        }
+
+        public Dictionary<string, IKeyName> Presets
+        {
+            get
+            {
+                return PresetsImpl.ToDictionary<SymetrixComposerDspPreset, string, IKeyName>(
+                    p => p.Key,
+                    p => p);
+            }
+        }
+#else
         public void RecallPreset(IDspPreset preset)
         {
             var symetrixDspPreset = preset as SymetrixComposerDspPreset;
             if (symetrixDspPreset == null)
                 return;
 
-            var command = SymetrixComposerDspPreset.GetPresetCommand(symetrixDspPreset.PresetNumber);
-            Coms.SendText(command);
+            RecallPresetInternal(symetrixDspPreset);
         }
 
         public List<IDspPreset> Presets { get { return PresetsImpl.OfType<IDspPreset>().ToList(); } }
+#endif
         public FeedbackCollection<Feedback> Feedbacks { get; private set; }
         public BoolFeedback IsOnline { get { return CommunicationMonitor.IsOnlineFeedback; } }
     }

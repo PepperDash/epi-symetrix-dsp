@@ -8,10 +8,15 @@ namespace PepperDashPluginSymetrixComposer.Factory
 {
     public class SymetrixComposerDeviceFactory : EssentialsPluginDeviceFactory<SymetrixComposerDevice>
     {
+#if !SERIES4
         public const string MinimumEssentialsVersion = "1.9.6";
+#endif
 
         public SymetrixComposerDeviceFactory()
         {
+#if SERIES4
+            MinimumEssentialsFrameworkVersion = "2.0.0";
+#endif
             TypeNames = new List<string> {"SymetrixDsp"};
         }
         public override EssentialsDevice BuildDevice(DeviceConfig dc)
