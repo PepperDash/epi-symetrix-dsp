@@ -14,9 +14,6 @@ namespace PepperDashPluginSymetrixComposer
 {
     public class SymetrixComposerDialer : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasPhoneDialing, IOnline
     {
-        private const int DebugLevel1 = 1;
-        private const int DebugLevel2 = 2;
-
         /// <summary>
         /// Caller ID
         /// </summary>
@@ -181,7 +178,7 @@ namespace PepperDashPluginSymetrixComposer
         /// <param name="coms"></param>
         public SymetrixComposerDialer(string key, DialerConfig config, IBasicCommunication coms) : base(key)
         {
-            Debug.Console(DebugLevel1, this, "Building...");
+            Debug.LogVerbose(this, "Building...");
             Coms = coms;
             UnitNumber = config.UnitNumber;
             CardSlot = config.CardSlot;
@@ -232,9 +229,9 @@ namespace PepperDashPluginSymetrixComposer
             CallerIdNumberFeedback =
                 new StringFeedback(Key + "-CallerId", () => _callerId);
             CallerIdNameFeedback = 
-                new StringFeedback(() => string.Empty);
+                new StringFeedback(Key + "-CallerIdName", () => string.Empty);
 
-            Debug.Console(DebugLevel1, this, "Adding myself to the Device Manager");
+            Debug.LogVerbose(this, "Adding myself to the Device Manager");
             DeviceManager.AddDevice(this);
 
             IncomingCallFeedback.OutputChange += (sender, args) =>

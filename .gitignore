@@ -353,3 +353,8 @@ MigrationBackup/
 .ionide/
 *.projectinfo
 *.projectinfo~Stashed changes
+
+# Build output
+output/
+packages/
+.nuget/

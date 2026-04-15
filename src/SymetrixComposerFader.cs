@@ -13,9 +13,6 @@ namespace PepperDashPluginSymetrixComposer
 {
     public class SymetrixComposerFader : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasFeedback
     {
-        private const int DebugLevel1 = 1;
-        private const int DebugLevel2 = 2;
-
         public const int DefaultFaderMinimum = -72;
         public const int DefaultFaderMaximum = 12;
         public const int DefaultIncrement = 2;
@@ -75,10 +72,10 @@ namespace PepperDashPluginSymetrixComposer
             {
                 var scaledUserMinimum = FaderUtils.ScaleToUshortRange(UserMinumum, FaderMinumum, FaderMaximum);
                 var scaledUserMaximum = FaderUtils.ScaleToUshortRange(UserMaximum, FaderMinumum, FaderMaximum);
-                Debug.Console(DebugLevel2, this, "Volume: scaledUserMinimum = '{0}'; scaledUserMaximum = '{1}'", scaledUserMinimum, scaledUserMaximum);
+                Debug.LogVerbose(this, "Volume: scaledUserMinimum = '{0}'; scaledUserMaximum = '{1}'", scaledUserMinimum, scaledUserMaximum);
 
                 _volume = FaderUtils.ScaleFromUshortRange(value, scaledUserMinimum, scaledUserMaximum);
-                Debug.Console(DebugLevel2, this, "Volume: _volume = '{0}'", _volume);
+                Debug.LogVerbose(this, "Volume: _volume = '{0}'", _volume);
                 VolumeLevelFeedback.FireUpdate();
             }
         }
@@ -93,7 +90,7 @@ namespace PepperDashPluginSymetrixComposer
             : base(key, config.Label)
         {
             Key = key;
-            Debug.Console(DebugLevel2, this, "Building...");
+            Debug.LogVerbose(this, "Building...");
             Name = config.Label;
             
             VolumeControllerId = config.LevelControlId;
@@ -129,12 +126,12 @@ namespace PepperDashPluginSymetrixComposer
             
             MuteFeedback = new BoolFeedback(Key + "-Mute", () => IsMuted);
             VolumeLevelFeedback = new IntFeedback(Key + "-Volume", () => Volume);
-            NameFeedback = new StringFeedback(() => Name);
-            MuteIconFeedback = new IntFeedback(() => IsMic ? MuteIconMic : MuteIconSpeaker);
-            PermissionsFeedback = new IntFeedback(() => Permissions);
-            FaderControlsFeedback = new IntFeedback(() => FaderControls);
+            NameFeedback = new StringFeedback(Key + "-Name", () => Name);
+            MuteIconFeedback = new IntFeedback(Key + "-MuteIcon", () => IsMic ? MuteIconMic : MuteIconSpeaker);
+            PermissionsFeedback = new IntFeedback(Key + "-Permissions", () => Permissions);
+            FaderControlsFeedback = new IntFeedback(Key + "-FaderControls", () => FaderControls);
 
-            Debug.Console(DebugLevel2, this, "Adding myself to the Device Manager");
+            Debug.LogVerbose(this, "Adding myself to the Device Manager");
             DeviceManager.AddDevice(this);
         }
 
