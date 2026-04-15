@@ -139,13 +139,13 @@ namespace PepperDashPluginSymetrixComposer.Utils
 
         public static Action<SymetrixComposerFader> UpdateVolumeControllerPosition(string response)
         {
-            Debug.LogVerbose("[Symetrix FaderUtils] UpdateVolumeControllerPosition: response = {response}", response);
+            Debug.LogVerbose("[Symetrix FaderUtils] UpdateVolumeControllerPosition: response = {0}", response);
             return f => f.Volume = ParsingUtils.ParseVolume(response);
         }
 
         public static Action<SymetrixComposerFader> UpdateMuteControllerPosition(string response)
         {
-            Debug.LogVerbose("[Symetrix FaderUtils] UpdateMuteControllerPosition: response = {response}", response);
+            Debug.LogVerbose("[Symetrix FaderUtils] UpdateMuteControllerPosition: response = {0}", response);
             return f => f.IsMuted = ParsingUtils.ParseState(response);
         }
     }

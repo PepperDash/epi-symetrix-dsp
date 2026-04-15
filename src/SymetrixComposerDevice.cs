@@ -71,14 +71,14 @@ namespace PepperDashPluginSymetrixComposer
         private void PortGatherOnLineReceived(object sender, GenericCommMethodReceiveTextArgs args)
         {
             var response = args.Text;
-            Debug.LogVerbose("PortGatherOnLineReceived: response = {response}", response);
+            Debug.LogVerbose("PortGatherOnLineReceived: response = {0}", response);
 
             try
             {
                 if (response.StartsWith("#"))
                 {
                     var controllerId = ParsingUtils.ParseControllerId(response);
-                    Debug.LogVerbose("PortGatherOnLineReceived: controllerId = {controllerId}", controllerId);
+                    Debug.LogVerbose("PortGatherOnLineReceived: controllerId = {0}", controllerId);
                     if (controllerId == 0)
                         return;
 
@@ -107,7 +107,7 @@ namespace PepperDashPluginSymetrixComposer
             }
             catch (Exception ex)
             {
-                Debug.LogError(ex, this, "Exception in PortGatherOnLineReceived: {message}", ex.Message);
+                Debug.LogError(ex, this, "Exception in PortGatherOnLineReceived: {0}", ex.Message);
             }
         }
 

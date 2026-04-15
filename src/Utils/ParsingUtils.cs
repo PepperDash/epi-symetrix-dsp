@@ -18,7 +18,7 @@ namespace PepperDashPluginSymetrixComposer.Utils
 
             var stringToParse = CleanResponse(response);
             var id = stringToParse.Split('=')[0];
-            Debug.LogVerbose("[Symetrix ParsingUtils] ParseControllerId: response-'{response}' id-'{id}'", response, id);
+            Debug.LogVerbose("[Symetrix ParsingUtils] ParseControllerId: response-'{0}' id-'{1}'", response, id);
             return Convert.ToUInt16(id);
         }
 
@@ -34,7 +34,7 @@ namespace PepperDashPluginSymetrixComposer.Utils
                 return defaultResult;
 
             var result = response.Split('=')[1];
-            Debug.LogVerbose("[Symetrix ParsingUtils] ParseVolume: response-'{response}' result-'{result}'", response, result);
+            Debug.LogVerbose("[Symetrix ParsingUtils] ParseVolume: response-'{0}' result-'{1}'", response, result);
             return Convert.ToUInt16(result);
         }
 
@@ -51,7 +51,7 @@ namespace PepperDashPluginSymetrixComposer.Utils
 
             var result = response.Split('=')[1];
             var muteResult = Convert.ToUInt16(result);
-            Debug.LogVerbose("[Symetrix ParsingUtils] ParseState: response-'{response}' muteResult-'{muteResult}'", response, muteResult);
+            Debug.LogVerbose("[Symetrix ParsingUtils] ParseState: response-'{0}' muteResult-'{1}'", response, muteResult);
             return muteResult == ushort.MaxValue;
         }
 

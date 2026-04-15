@@ -72,10 +72,10 @@ namespace PepperDashPluginSymetrixComposer
             {
                 var scaledUserMinimum = FaderUtils.ScaleToUshortRange(UserMinumum, FaderMinumum, FaderMaximum);
                 var scaledUserMaximum = FaderUtils.ScaleToUshortRange(UserMaximum, FaderMinumum, FaderMaximum);
-                Debug.LogVerbose(this, "Volume: scaledUserMinimum = '{scaledUserMinimum}'; scaledUserMaximum = '{scaledUserMaximum}'", scaledUserMinimum, scaledUserMaximum);
+                Debug.LogVerbose(this, "Volume: scaledUserMinimum = '{0}'; scaledUserMaximum = '{1}'", scaledUserMinimum, scaledUserMaximum);
 
                 _volume = FaderUtils.ScaleFromUshortRange(value, scaledUserMinimum, scaledUserMaximum);
-                Debug.LogVerbose(this, "Volume: _volume = '{volume}'", _volume);
+                Debug.LogVerbose(this, "Volume: _volume = '{0}'", _volume);
                 VolumeLevelFeedback.FireUpdate();
             }
         }

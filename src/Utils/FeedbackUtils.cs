@@ -9,7 +9,7 @@ namespace PepperDashPluginSymetrixComposer.Utils
         public static void RegisterForFeedbackText<T>(this FeedbackCollection<T> feedbacks, IKeyed parent)
             where T : Feedback
         {
-            const string valueUpdatedTemplate = "{key}: ValueUpdated | {value}";
+            const string valueUpdatedTemplate = "{0}: ValueUpdated | {1}";
             var feedbacksWithKey = feedbacks.Where(b => !string.IsNullOrEmpty(b.Key)).ToList();
             feedbacksWithKey.OfType<BoolFeedback>().ToList().ForEach(
                 fb =>
