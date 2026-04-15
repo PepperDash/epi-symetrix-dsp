@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Crestron.SimplSharp;
@@ -17,17 +17,10 @@ namespace PepperDashPluginSymetrixComposer
 {
     public class SymetrixComposerDevice : ReconfigurableBridgableDevice,
         ICommunicationMonitor,
-#if !SERIES4
-        IHasDspPresets,
-#else
         IDspPresets,
-#endif
         IHasFeedback,
         IOnline
     {
-        private const int DebugLevel1 = 1;
-        private const int DebugLevel2 = 2;
-
         public readonly IBasicCommunication Coms;
         public readonly CommunicationGather PortGather;
         public readonly IEnumerable<SymetrixComposerFader> Faders;
@@ -66,7 +59,7 @@ namespace PepperDashPluginSymetrixComposer
                     Coms.SendText("PUR\r");
             };
 
-            Debug.Console(DebugLevel1, this, "Device created");
+            Debug.LogVerbose(this, "Device created");
 
             DeviceManager.AllDevicesActivated += (sender, args) =>
             {
@@ -78,14 +71,14 @@ namespace PepperDashPluginSymetrixComposer
         private void PortGatherOnLineReceived(object sender, GenericCommMethodReceiveTextArgs args)
         {
             var response = args.Text;
-            Debug.Console(DebugLevel2, "PortGatherOnLineReceived: response = {0}", response);
+            Debug.LogVerbose("PortGatherOnLineReceived: response = {response}", response);
 
             try
             {
                 if (response.StartsWith("#"))
                 {
                     var controllerId = ParsingUtils.ParseControllerId(response);
-                    Debug.Console(DebugLevel2, "PortGatherOnLineReceived: controllerId = {0}", controllerId);
+                    Debug.LogVerbose("PortGatherOnLineReceived: controllerId = {controllerId}", controllerId);
                     if (controllerId == 0)
                         return;
 
@@ -114,9 +107,7 @@ namespace PepperDashPluginSymetrixComposer
             }
             catch (Exception ex)
             {
-                Debug.Console(DebugLevel1, this, Debug.ErrorLogLevel.Notice, "Exception Message: {0}", ex.Message);
-                Debug.Console(DebugLevel2, this, Debug.ErrorLogLevel.Notice, "Exception Stack Trace: {0}", ex.StackTrace);
-                if (ex.InnerException != null) Debug.Console(DebugLevel1, this, Debug.ErrorLogLevel.Notice, "Inner Exception: {0}", ex.InnerException);
+                Debug.LogError(ex, this, "Exception in PortGatherOnLineReceived: {message}", ex.Message);
             }
         }
 
@@ -154,7 +145,7 @@ namespace PepperDashPluginSymetrixComposer
             {
                 var preset = PresetsImpl.ElementAt((int)x);
                 trilist.SetSigTrueAction(joinMap.PresetRecall.JoinNumber + x, () => RecallPresetInternal(preset));
-                var fb = new StringFeedback(() => preset.Name);
+                var fb = new StringFeedback(preset.Key + "-Name", () => preset.Name);
                 fb.LinkInputSig(trilist.StringInput[joinMap.PresetRecall.JoinNumber + x]);
                 fb.FireUpdate();
             }
@@ -176,7 +167,6 @@ namespace PepperDashPluginSymetrixComposer
             Coms.SendText(command);
         }
 
-#if SERIES4
         public void RecallPreset(string key)
         {
             var preset = PresetsImpl.FirstOrDefault(p => p.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
@@ -195,18 +185,7 @@ namespace PepperDashPluginSymetrixComposer
                     p => p);
             }
         }
-#else
-        public void RecallPreset(IDspPreset preset)
-        {
-            var symetrixDspPreset = preset as SymetrixComposerDspPreset;
-            if (symetrixDspPreset == null)
-                return;
 
-            RecallPresetInternal(symetrixDspPreset);
-        }
-
-        public List<IDspPreset> Presets { get { return PresetsImpl.OfType<IDspPreset>().ToList(); } }
-#endif
         public FeedbackCollection<Feedback> Feedbacks { get; private set; }
         public BoolFeedback IsOnline { get { return CommunicationMonitor.IsOnlineFeedback; } }
     }

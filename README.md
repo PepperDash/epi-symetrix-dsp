@@ -1,8 +1,11 @@
 # PepperDash Plugin - Symetrix Composer
 
+![Essentials-v2](https://img.shields.io/badge/Essentials-v2-teal.svg)
+
 ## Notes
 1. Tested on-site with a Symetrix Radius NX 12x8 using TCP/IP control.
 2. Unit tested did not implement a phone dialer (VoIP or POTS), currently this portion of the plugin is untested.
+3. This plugin targets **Essentials v2.x** (4-series). For the 3-series / Essentials v1.x maintenance line, see the `maintenance/1x` branch.
 
 ### DSP Control Methods Supported
 ```json

@@ -5,9 +5,6 @@ namespace PepperDashPluginSymetrixComposer.Utils
 {
     public static class FaderUtils
     {
-        private const int DebugLevel1 = 1;
-        private const int DebugLevel2 = 2;
-
         /// <summary>
         /// Controller set command format
         /// ex. 'CS {CONTROLLER_NUMBER} {CONTROLLER_POSITION}\r'
@@ -142,13 +139,13 @@ namespace PepperDashPluginSymetrixComposer.Utils
 
         public static Action<SymetrixComposerFader> UpdateVolumeControllerPosition(string response)
         {
-            Debug.Console(DebugLevel2, "[Symetrix FaderUtils] UpdateVolumeControllerPosition: response = {0}", response);
+            Debug.LogVerbose("[Symetrix FaderUtils] UpdateVolumeControllerPosition: response = {response}", response);
             return f => f.Volume = ParsingUtils.ParseVolume(response);
         }
 
         public static Action<SymetrixComposerFader> UpdateMuteControllerPosition(string response)
         {
-            Debug.Console(DebugLevel2, "[Symetrix FaderUtils] UpdateMuteControllerPosition: response = {0}", response);
+            Debug.LogVerbose("[Symetrix FaderUtils] UpdateMuteControllerPosition: response = {response}", response);
             return f => f.IsMuted = ParsingUtils.ParseState(response);
         }
     }
