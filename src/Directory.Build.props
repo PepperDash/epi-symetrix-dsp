@@ -8,7 +8,7 @@
     <Copyright>Copyright © 2026</Copyright>
     <RepositoryUrl>https://github.com/PepperDash/epi-symetrix-dsp.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>Crestron; 4series</PackageTags>
+    <PackageTags>crestron 4series symetrix dsp</PackageTags>
     <PackageOutputPath>..\output</PackageOutputPath>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>

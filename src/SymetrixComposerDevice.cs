@@ -102,7 +102,7 @@ namespace PepperDash.Essentials.Plugin
                 // TODO [ ] Verify dialer feedback
                 if (response.StartsWith("GSSYS"))
                 {
-                    throw new NotImplementedException("[Symetrix DSP] Dialer GSSYS feedback processing not implemented");
+                    Debug.LogVerbose(this, "[Symetrix DSP] Dialer GSSYS feedback processing not implemented");
                 }
             }
             catch (Exception ex)
