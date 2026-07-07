@@ -28,7 +28,7 @@ namespace PepperDash.Essentials.Plugin
         private const int FaderControlsLevelAndMute = 0;
         private const int FaderControlsLevelOnly = 1;
         private const int FaderControlsMuteOnly = 2;
-        
+
         public readonly int UserMinumum;
         public readonly int UserMaximum;
         public readonly int FaderMinumum;
@@ -92,16 +92,16 @@ namespace PepperDash.Essentials.Plugin
             Key = key;
             Debug.LogVerbose(this, "Building...");
             Name = config.Label;
-            
+
             VolumeControllerId = config.LevelControlId;
             MuteControllerId = config.MuteControlId;
             IsMic = config.IsMic;
             UnmuteOnVolumeChange = config.UnmuteOnVolChange;
-            
+
             // if configured, set the fader min/max.  this changes based on the DSP object used
             FaderMinumum = config.FaderMinimum ?? DefaultFaderMinimum;
             FaderMaximum = config.FaderMaximum ?? DefaultFaderMaximum;
-            
+
             // if not configured, use the fader min/max
             UserMinumum = config.UserMinimum ?? FaderMinumum;
             UserMaximum = config.UserMaximum ?? FaderMaximum;
@@ -111,7 +111,7 @@ namespace PepperDash.Essentials.Plugin
             {
                 FaderControls = FaderControlsLevelOnly;
             }
-            else if(!config.HasLevel && config.HasMute)
+            else if (!config.HasLevel && config.HasMute)
             {
                 FaderControls = FaderControlsMuteOnly;
             }
@@ -119,11 +119,11 @@ namespace PepperDash.Essentials.Plugin
             {
                 FaderControls = FaderControlsLevelAndMute;
             }
-           
+
             Permissions = config.Permissions ?? DefaultPermissions;
-            
+
             Coms = coms;
-            
+
             MuteFeedback = new BoolFeedback(Key + "-Mute", () => IsMuted);
             VolumeLevelFeedback = new IntFeedback(Key + "-Volume", () => Volume);
             NameFeedback = new StringFeedback(Key + "-Name", () => Name);
@@ -368,7 +368,7 @@ namespace PepperDash.Essentials.Plugin
             MuteFeedback.LinkInputSig(trilist.BooleanInput[joinMap.MuteOn.JoinNumber]);
             NameFeedback.LinkInputSig(trilist.StringInput[joinMap.Name.JoinNumber]);
             MuteIconFeedback.LinkInputSig(trilist.UShortInput[joinMap.Type.JoinNumber]);
-            FaderControlsFeedback.LinkInputSig(trilist.UShortInput[joinMap.FaderControls.JoinNumber]); 
+            FaderControlsFeedback.LinkInputSig(trilist.UShortInput[joinMap.FaderControls.JoinNumber]);
             PermissionsFeedback.LinkInputSig(trilist.UShortInput[joinMap.Permissions.JoinNumber]);
         }
 

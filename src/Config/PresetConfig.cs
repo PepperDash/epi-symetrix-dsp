@@ -6,7 +6,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.Config
     {
         [JsonProperty("label")]
         public string Label { get; set; }
-        
+
         [JsonProperty("presetNumber")]
         public int PresetNumber { get; set; }
     }

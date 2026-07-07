@@ -11,7 +11,7 @@ namespace PepperDash.Essentials.Plugin
         public SymetrixComposerDeviceFactory()
         {
             MinimumEssentialsFrameworkVersion = "2.12.1";
-            TypeNames = new List<string> {"SymetrixDsp"};
+            TypeNames = new List<string> { "SymetrixDsp" };
         }
 
         public override EssentialsDevice BuildDevice(DeviceConfig dc)

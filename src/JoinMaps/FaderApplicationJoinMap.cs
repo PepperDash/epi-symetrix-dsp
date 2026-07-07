@@ -111,7 +111,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
                 Description = "Fader mute type, level mute (0) or mic mute (1)",
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
                 JoinType = eJoinType.Analog,
-                ValidValues = new[] {"0", "1"},
+                ValidValues = new[] { "0", "1" },
             });
 
         [JoinName("FaderControls")]

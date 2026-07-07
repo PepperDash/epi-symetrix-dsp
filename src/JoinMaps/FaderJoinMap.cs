@@ -7,7 +7,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
     /// </summary>
     public class FaderJoinMap : JoinMapBaseAdvanced
     {
-        [JoinName("Volume Up")] 
+        [JoinName("Volume Up")]
         public JoinDataComplete VolumeUp = new JoinDataComplete(
             new JoinData
             {
@@ -21,7 +21,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
                 Description = "Volume Up"
             });
 
-        [JoinName("Volume Down")] 
+        [JoinName("Volume Down")]
         public JoinDataComplete VolumeDown = new JoinDataComplete(
             new JoinData
             {
@@ -35,7 +35,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
                 Description = "Volume Down"
             });
 
-        [JoinName("Mute On")] 
+        [JoinName("Mute On")]
         public JoinDataComplete MuteOn = new JoinDataComplete(
             new JoinData
             {
@@ -49,7 +49,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
                 Description = "Mute On"
             });
 
-        [JoinName("Mute Off")] 
+        [JoinName("Mute Off")]
         public JoinDataComplete MuteOff = new JoinDataComplete(
             new JoinData
             {
@@ -63,7 +63,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
                 Description = "Mute Off"
             });
 
-        [JoinName("Mute Toggle")] 
+        [JoinName("Mute Toggle")]
         public JoinDataComplete MuteToggle = new JoinDataComplete(
             new JoinData
             {
@@ -77,7 +77,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
                 Description = "Mute Toggle"
             });
 
-        [JoinName("Volume")] 
+        [JoinName("Volume")]
         public JoinDataComplete Volume = new JoinDataComplete(
             new JoinData
             {
@@ -91,7 +91,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
                 Description = "Volume"
             });
 
-        [JoinName("MuteIcon")] 
+        [JoinName("MuteIcon")]
         public JoinDataComplete MuteIcon = new JoinDataComplete(
             new JoinData
             {
@@ -103,7 +103,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
                 JoinCapabilities = eJoinCapabilities.ToSIMPL,
                 JoinType = eJoinType.Analog,
                 Description = "Mute Icon sets the fader mute icon, level mute (0) or mic mute (1)",
-                ValidValues = new[] {"0", "1"},
+                ValidValues = new[] { "0", "1" },
             });
 
         [JoinName("FaderControls")]
@@ -134,7 +134,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
                 JoinType = eJoinType.Analog
             });
 
-        [JoinName("Name")] 
+        [JoinName("Name")]
         public JoinDataComplete Name = new JoinDataComplete(
             new JoinData
             {
@@ -148,7 +148,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps
                 Description = "Name"
             });
 
-        public FaderJoinMap(uint joinStart) : base(joinStart, typeof (FaderJoinMap))
+        public FaderJoinMap(uint joinStart) : base(joinStart, typeof(FaderJoinMap))
         {
         }
     }

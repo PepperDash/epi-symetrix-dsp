@@ -228,7 +228,7 @@ namespace PepperDash.Essentials.Plugin
                 new StringFeedback(Key + "-DialString", () => _numberToDial.ToString());
             CallerIdNumberFeedback =
                 new StringFeedback(Key + "-CallerId", () => _callerId);
-            CallerIdNameFeedback = 
+            CallerIdNameFeedback =
                 new StringFeedback(Key + "-CallerIdName", () => string.Empty);
 
             Debug.LogVerbose(this, "Adding myself to the Device Manager");
@@ -254,26 +254,28 @@ namespace PepperDash.Essentials.Plugin
 
         public void SetVolume(ushort level)
         {
-            ((IBasicVolumeWithFeedback) _atcRx).SetVolume(level);
+            ((IBasicVolumeWithFeedback)_atcRx).SetVolume(level);
         }
 
         public void MuteOn()
         {
-            ((IBasicVolumeWithFeedback) _atcRx).MuteOn();
+            ((IBasicVolumeWithFeedback)_atcRx).MuteOn();
         }
 
         public void MuteOff()
         {
-            ((IBasicVolumeWithFeedback) _atcRx).MuteOff();
+            ((IBasicVolumeWithFeedback)_atcRx).MuteOff();
         }
 
         public IntFeedback VolumeLevelFeedback
         {
-            get { return _atcRx.VolumeLevelFeedback; } }
+            get { return _atcRx.VolumeLevelFeedback; }
+        }
 
         public BoolFeedback MuteFeedback
         {
-            get { return _atcRx.MuteFeedback; } }
+            get { return _atcRx.MuteFeedback; }
+        }
 
         public void DoNotDisturbToggle()
         {
@@ -344,7 +346,7 @@ namespace PepperDash.Essentials.Plugin
 
         public void SendDtmfToPhone(string digit)
         {
-            if(!PhoneOffHookFeedback.BoolValue)
+            if (!PhoneOffHookFeedback.BoolValue)
                 return;
 
             DialerUtils
@@ -484,17 +486,17 @@ namespace PepperDash.Essentials.Plugin
 
         public void VolumeUp(bool pressRelease)
         {
-            ((IBasicVolumeControls) _atcRx).VolumeUp(pressRelease);
+            ((IBasicVolumeControls)_atcRx).VolumeUp(pressRelease);
         }
 
         public void VolumeDown(bool pressRelease)
         {
-            ((IBasicVolumeControls) _atcRx).VolumeDown(pressRelease);
+            ((IBasicVolumeControls)_atcRx).VolumeDown(pressRelease);
         }
 
         public void MuteToggle()
         {
-            ((IBasicVolumeControls) _atcRx).MuteToggle();
+            ((IBasicVolumeControls)_atcRx).MuteToggle();
         }
 
 

@@ -9,7 +9,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.Config
 
         [JsonProperty("levelControlId")]
         public int LevelControlId { get; set; }
-        
+
         [JsonProperty("muteControlId")]
         public int MuteControlId { get; set; }
 
@@ -18,7 +18,7 @@ namespace PepperDash.Essentials.Plugin.SymetrixComposer.Config
 
         [JsonProperty("isMic")]
         public bool IsMic { get; set; }
-        
+
         [JsonProperty("unmuteOnVolChange")]
         public bool UnmuteOnVolChange { get; set; }
 
