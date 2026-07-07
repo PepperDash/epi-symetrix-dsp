@@ -10,7 +10,7 @@ namespace PepperDash.Essentials.Plugin
     {
         public SymetrixComposerDeviceFactory()
         {
-            MinimumEssentialsFrameworkVersion = "2.12.1";
+            MinimumEssentialsFrameworkVersion = "2.29.0";
             TypeNames = new List<string> { "SymetrixDsp" };
         }
 
