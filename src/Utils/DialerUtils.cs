@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PepperDashPluginSymetrixComposer.Enums;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Enums;
 
-namespace PepperDashPluginSymetrixComposer.Utils
+namespace PepperDash.Essentials.Plugin.SymetrixComposer.Utils
 {
     public static class DialerUtils
     {

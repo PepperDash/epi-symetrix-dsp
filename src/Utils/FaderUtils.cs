@@ -1,7 +1,7 @@
 using System;
 using PepperDash.Core;
 
-namespace PepperDashPluginSymetrixComposer.Utils
+namespace PepperDash.Essentials.Plugin.SymetrixComposer.Utils
 {
     public static class FaderUtils
     {

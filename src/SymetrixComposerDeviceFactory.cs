@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Config;
-using PepperDashPluginSymetrixComposer.Config;
-using PepperDashPluginSymetrixComposer.Utils;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Config;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Utils;
 
-namespace PepperDashPluginSymetrixComposer.Factory
+namespace PepperDash.Essentials.Plugin
 {
     public class SymetrixComposerDeviceFactory : EssentialsPluginDeviceFactory<SymetrixComposerDevice>
     {
         public SymetrixComposerDeviceFactory()
         {
-            MinimumEssentialsFrameworkVersion = "2.0.0";
+            MinimumEssentialsFrameworkVersion = "2.12.1";
             TypeNames = new List<string> {"SymetrixDsp"};
         }
 

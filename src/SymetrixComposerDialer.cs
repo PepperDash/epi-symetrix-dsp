@@ -5,12 +5,12 @@ using PepperDash.Core;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Bridges;
 using PepperDash.Essentials.Core.DeviceTypeInterfaces;
-using PepperDashPluginSymetrixComposer.Config;
-using PepperDashPluginSymetrixComposer.Enums;
-using PepperDashPluginSymetrixComposer.JoinMaps;
-using PepperDashPluginSymetrixComposer.Utils;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Config;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Enums;
+using PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Utils;
 
-namespace PepperDashPluginSymetrixComposer
+namespace PepperDash.Essentials.Plugin
 {
     public class SymetrixComposerDialer : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasPhoneDialing, IOnline
     {

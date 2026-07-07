@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PepperDashPluginSymetrixComposer.Config
+namespace PepperDash.Essentials.Plugin.SymetrixComposer.Config
 {
     public class FaderConfig
     {

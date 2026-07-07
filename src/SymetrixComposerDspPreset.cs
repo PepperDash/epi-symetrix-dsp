@@ -1,7 +1,7 @@
 using PepperDash.Essentials.Core;
-using PepperDashPluginSymetrixComposer.Config;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Config;
 
-namespace PepperDashPluginSymetrixComposer
+namespace PepperDash.Essentials.Plugin
 {
     public class SymetrixComposerDspPreset : EssentialsDevice
     {

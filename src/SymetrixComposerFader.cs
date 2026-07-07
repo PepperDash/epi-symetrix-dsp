@@ -4,12 +4,12 @@ using Crestron.SimplSharpPro.DeviceSupport;
 using PepperDash.Core;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Bridges;
-using PepperDashPluginSymetrixComposer.Config;
-using PepperDashPluginSymetrixComposer.JoinMaps;
-using PepperDashPluginSymetrixComposer.Utils;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Config;
+using PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Utils;
 using Feedback = PepperDash.Essentials.Core.Feedback;
 
-namespace PepperDashPluginSymetrixComposer
+namespace PepperDash.Essentials.Plugin
 {
     public class SymetrixComposerFader : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasFeedback
     {

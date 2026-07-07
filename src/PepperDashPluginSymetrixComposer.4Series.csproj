@@ -4,12 +4,12 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<TargetFramework>net472</TargetFramework>
-		<RootNamespace>PepperDashPluginSymetrixComposer</RootNamespace>
+		<RootNamespace>PepperDash.Essentials.Plugin</RootNamespace>
 		<Deterministic>false</Deterministic>
-		<AssemblyTitle>PepperDashPluginSymetrixComposer</AssemblyTitle>
+		<AssemblyTitle>PepperDash.Essentials.Plugin.Symetrix.DSP</AssemblyTitle>
 		<Company>PepperDash Technology</Company>
 		<Description>Symetrix Composer DSP Essentials Plugin</Description>
-		<Copyright>Copyright 2021</Copyright>
+		<Copyright>Copyright @ 2026</Copyright>
 		<Version>1.0.0-local</Version>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<InformationalVersion>$(Version)</InformationalVersion>

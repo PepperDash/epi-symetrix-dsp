@@ -2,7 +2,7 @@ using System.Linq;
 using PepperDash.Core;
 using PepperDash.Essentials.Core;
 
-namespace PepperDashPluginSymetrixComposer.Utils
+namespace PepperDash.Essentials.Plugin.SymetrixComposer.Utils
 {
     public static class FeedbackUtils
     {
