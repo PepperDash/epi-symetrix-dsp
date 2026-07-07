@@ -2,7 +2,7 @@
 using PepperDash.Core;
 using PepperDash.Essentials.Core;
 
-namespace PepperDashPluginSymetrixComposer.Config
+namespace PepperDash.Essentials.Plugin.SymetrixComposer.Config
 {
     public class DevicePropertiesConfig
     {

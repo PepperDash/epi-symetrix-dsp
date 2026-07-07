@@ -1,13 +1,9 @@
-﻿using System;
 using PepperDash.Core;
 
-namespace PepperDashPluginSymetrixComposer.Utils
+namespace PepperDash.Essentials.Plugin.SymetrixComposer.Utils
 {
     public static class ParsingUtils
     {
-        private const int DebugLevel1 = 1;
-        private const int DebugLevel2 = 2;
-
         /// <summary>
         /// Parses controller ID from response, ex. '#00007=12321\r'
         /// </summary>
@@ -15,14 +11,16 @@ namespace PepperDashPluginSymetrixComposer.Utils
         /// <returns></returns>
         public static ushort ParseControllerId(string response)
         {
-            const int defaultResult = 0;
+            const ushort defaultResult = 0;
             if (string.IsNullOrEmpty(response) || !response.StartsWith("#"))
                 return defaultResult;
 
             var stringToParse = CleanResponse(response);
             var id = stringToParse.Split('=')[0];
-            Debug.Console(DebugLevel1, "[Symetrix ParsingUtils] ParseControllerId: response-'{0}' id-'{1}'", response, id);
-            return Convert.ToUInt16(id);
+            Debug.LogVerbose("[Symetrix ParsingUtils] ParseControllerId: response-'{0}' id-'{1}'", response, id);
+
+            ushort result;
+            return ushort.TryParse(id, out result) ? result : defaultResult;
         }
 
         /// <summary>
@@ -32,13 +30,19 @@ namespace PepperDashPluginSymetrixComposer.Utils
         /// <returns></returns>
         public static ushort ParseVolume(string response)
         {
-            const int defaultResult = 0;
+            const ushort defaultResult = 0;
             if (string.IsNullOrEmpty(response) || !response.StartsWith("#"))
                 return defaultResult;
 
-            var result = response.Split('=')[1];
-            Debug.Console(DebugLevel1, "[Symetrix ParsingUtils] ParseVolume: response-'{0}' result-'{1}'", response, result);
-            return Convert.ToUInt16(result);
+            var segments = response.Split('=');
+            if (segments.Length < 2)
+                return defaultResult;
+
+            var result = segments[1];
+            Debug.LogVerbose("[Symetrix ParsingUtils] ParseVolume: response-'{0}' result-'{1}'", response, result);
+
+            ushort volume;
+            return ushort.TryParse(result, out volume) ? volume : defaultResult;
         }
 
         /// <summary>
@@ -52,9 +56,15 @@ namespace PepperDashPluginSymetrixComposer.Utils
             if (string.IsNullOrEmpty(response) || !response.StartsWith("#"))
                 return defaultResult;
 
-            var result = response.Split('=')[1];
-            var muteResult = Convert.ToUInt16(result);
-            Debug.Console(DebugLevel1, "[Symetrix ParsingUtils] ParseState: response-'{0}' muteResult-'{1}'", response, muteResult);
+            var segments = response.Split('=');
+            if (segments.Length < 2)
+                return defaultResult;
+
+            ushort muteResult;
+            if (!ushort.TryParse(segments[1], out muteResult))
+                return defaultResult;
+
+            Debug.LogVerbose("[Symetrix ParsingUtils] ParseState: response-'{0}' muteResult-'{1}'", response, muteResult);
             return muteResult == ushort.MaxValue;
         }
 

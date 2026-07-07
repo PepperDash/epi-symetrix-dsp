@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PepperDashPluginSymetrixComposer.Config
+namespace PepperDash.Essentials.Plugin.SymetrixComposer.Config
 {
     public class FaderConfig
     {
@@ -9,7 +9,7 @@ namespace PepperDashPluginSymetrixComposer.Config
 
         [JsonProperty("levelControlId")]
         public int LevelControlId { get; set; }
-        
+
         [JsonProperty("muteControlId")]
         public int MuteControlId { get; set; }
 
@@ -18,7 +18,7 @@ namespace PepperDashPluginSymetrixComposer.Config
 
         [JsonProperty("isMic")]
         public bool IsMic { get; set; }
-        
+
         [JsonProperty("unmuteOnVolChange")]
         public bool UnmuteOnVolChange { get; set; }
 

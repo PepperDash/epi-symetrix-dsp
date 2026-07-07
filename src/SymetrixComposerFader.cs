@@ -4,18 +4,15 @@ using Crestron.SimplSharpPro.DeviceSupport;
 using PepperDash.Core;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Bridges;
-using PepperDashPluginSymetrixComposer.Config;
-using PepperDashPluginSymetrixComposer.JoinMaps;
-using PepperDashPluginSymetrixComposer.Utils;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Config;
+using PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Utils;
 using Feedback = PepperDash.Essentials.Core.Feedback;
 
-namespace PepperDashPluginSymetrixComposer
+namespace PepperDash.Essentials.Plugin
 {
     public class SymetrixComposerFader : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasFeedback
     {
-        private const int DebugLevel1 = 1;
-        private const int DebugLevel2 = 2;
-
         public const int DefaultFaderMinimum = -72;
         public const int DefaultFaderMaximum = 12;
         public const int DefaultIncrement = 2;
@@ -31,7 +28,7 @@ namespace PepperDashPluginSymetrixComposer
         private const int FaderControlsLevelAndMute = 0;
         private const int FaderControlsLevelOnly = 1;
         private const int FaderControlsMuteOnly = 2;
-        
+
         public readonly int UserMinumum;
         public readonly int UserMaximum;
         public readonly int FaderMinumum;
@@ -75,10 +72,10 @@ namespace PepperDashPluginSymetrixComposer
             {
                 var scaledUserMinimum = FaderUtils.ScaleToUshortRange(UserMinumum, FaderMinumum, FaderMaximum);
                 var scaledUserMaximum = FaderUtils.ScaleToUshortRange(UserMaximum, FaderMinumum, FaderMaximum);
-                Debug.Console(DebugLevel2, this, "Volume: scaledUserMinimum = '{0}'; scaledUserMaximum = '{1}'", scaledUserMinimum, scaledUserMaximum);
+                Debug.LogVerbose(this, "Volume: scaledUserMinimum = '{0}'; scaledUserMaximum = '{1}'", scaledUserMinimum, scaledUserMaximum);
 
                 _volume = FaderUtils.ScaleFromUshortRange(value, scaledUserMinimum, scaledUserMaximum);
-                Debug.Console(DebugLevel2, this, "Volume: _volume = '{0}'", _volume);
+                Debug.LogVerbose(this, "Volume: _volume = '{0}'", _volume);
                 VolumeLevelFeedback.FireUpdate();
             }
         }
@@ -93,18 +90,18 @@ namespace PepperDashPluginSymetrixComposer
             : base(key, config.Label)
         {
             Key = key;
-            Debug.Console(DebugLevel2, this, "Building...");
+            Debug.LogVerbose(this, "Building...");
             Name = config.Label;
-            
+
             VolumeControllerId = config.LevelControlId;
             MuteControllerId = config.MuteControlId;
             IsMic = config.IsMic;
             UnmuteOnVolumeChange = config.UnmuteOnVolChange;
-            
+
             // if configured, set the fader min/max.  this changes based on the DSP object used
             FaderMinumum = config.FaderMinimum ?? DefaultFaderMinimum;
             FaderMaximum = config.FaderMaximum ?? DefaultFaderMaximum;
-            
+
             // if not configured, use the fader min/max
             UserMinumum = config.UserMinimum ?? FaderMinumum;
             UserMaximum = config.UserMaximum ?? FaderMaximum;
@@ -114,7 +111,7 @@ namespace PepperDashPluginSymetrixComposer
             {
                 FaderControls = FaderControlsLevelOnly;
             }
-            else if(!config.HasLevel && config.HasMute)
+            else if (!config.HasLevel && config.HasMute)
             {
                 FaderControls = FaderControlsMuteOnly;
             }
@@ -122,19 +119,19 @@ namespace PepperDashPluginSymetrixComposer
             {
                 FaderControls = FaderControlsLevelAndMute;
             }
-           
+
             Permissions = config.Permissions ?? DefaultPermissions;
-            
+
             Coms = coms;
-            
+
             MuteFeedback = new BoolFeedback(Key + "-Mute", () => IsMuted);
             VolumeLevelFeedback = new IntFeedback(Key + "-Volume", () => Volume);
-            NameFeedback = new StringFeedback(() => Name);
-            MuteIconFeedback = new IntFeedback(() => IsMic ? MuteIconMic : MuteIconSpeaker);
-            PermissionsFeedback = new IntFeedback(() => Permissions);
-            FaderControlsFeedback = new IntFeedback(() => FaderControls);
+            NameFeedback = new StringFeedback(Key + "-Name", () => Name);
+            MuteIconFeedback = new IntFeedback(Key + "-MuteIcon", () => IsMic ? MuteIconMic : MuteIconSpeaker);
+            PermissionsFeedback = new IntFeedback(Key + "-Permissions", () => Permissions);
+            FaderControlsFeedback = new IntFeedback(Key + "-FaderControls", () => FaderControls);
 
-            Debug.Console(DebugLevel2, this, "Adding myself to the Device Manager");
+            Debug.LogVerbose(this, "Adding myself to the Device Manager");
             DeviceManager.AddDevice(this);
         }
 
@@ -371,7 +368,7 @@ namespace PepperDashPluginSymetrixComposer
             MuteFeedback.LinkInputSig(trilist.BooleanInput[joinMap.MuteOn.JoinNumber]);
             NameFeedback.LinkInputSig(trilist.StringInput[joinMap.Name.JoinNumber]);
             MuteIconFeedback.LinkInputSig(trilist.UShortInput[joinMap.Type.JoinNumber]);
-            FaderControlsFeedback.LinkInputSig(trilist.UShortInput[joinMap.FaderControls.JoinNumber]); 
+            FaderControlsFeedback.LinkInputSig(trilist.UShortInput[joinMap.FaderControls.JoinNumber]);
             PermissionsFeedback.LinkInputSig(trilist.UShortInput[joinMap.Permissions.JoinNumber]);
         }
 

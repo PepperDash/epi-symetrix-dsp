@@ -1,9 +1,9 @@
-﻿using PepperDash.Essentials.Core;
-using PepperDashPluginSymetrixComposer.Config;
+using PepperDash.Essentials.Core;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Config;
 
-namespace PepperDashPluginSymetrixComposer
+namespace PepperDash.Essentials.Plugin
 {
-    public class SymetrixComposerDspPreset : EssentialsDevice, IDspPreset
+    public class SymetrixComposerDspPreset : EssentialsDevice
     {
         /// <summary>
         /// Preset number, ex. 'LP {PRESET_NUMBER}\r'
@@ -23,7 +23,7 @@ namespace PepperDashPluginSymetrixComposer
         }
 
         /// <summary>
-        /// Builds the preset command with the provided present number
+        /// Builds the preset command with the provided preset number
         /// </summary>
         /// <param name="presetNumber">integer</param>
         /// <returns>string</returns>

@@ -5,18 +5,15 @@ using PepperDash.Core;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Bridges;
 using PepperDash.Essentials.Core.DeviceTypeInterfaces;
-using PepperDashPluginSymetrixComposer.Config;
-using PepperDashPluginSymetrixComposer.Enums;
-using PepperDashPluginSymetrixComposer.JoinMaps;
-using PepperDashPluginSymetrixComposer.Utils;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Config;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Enums;
+using PepperDash.Essentials.Plugin.SymetrixComposer.JoinMaps;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Utils;
 
-namespace PepperDashPluginSymetrixComposer
+namespace PepperDash.Essentials.Plugin
 {
     public class SymetrixComposerDialer : EssentialsBridgeableDevice, IBasicVolumeWithFeedback, IHasPhoneDialing, IOnline
     {
-        private const int DebugLevel1 = 1;
-        private const int DebugLevel2 = 2;
-
         /// <summary>
         /// Caller ID
         /// </summary>
@@ -181,7 +178,7 @@ namespace PepperDashPluginSymetrixComposer
         /// <param name="coms"></param>
         public SymetrixComposerDialer(string key, DialerConfig config, IBasicCommunication coms) : base(key)
         {
-            Debug.Console(DebugLevel1, this, "Building...");
+            Debug.LogVerbose(this, "Building...");
             Coms = coms;
             UnitNumber = config.UnitNumber;
             CardSlot = config.CardSlot;
@@ -231,10 +228,10 @@ namespace PepperDashPluginSymetrixComposer
                 new StringFeedback(Key + "-DialString", () => _numberToDial.ToString());
             CallerIdNumberFeedback =
                 new StringFeedback(Key + "-CallerId", () => _callerId);
-            CallerIdNameFeedback = 
-                new StringFeedback(() => string.Empty);
+            CallerIdNameFeedback =
+                new StringFeedback(Key + "-CallerIdName", () => string.Empty);
 
-            Debug.Console(DebugLevel1, this, "Adding myself to the Device Manager");
+            Debug.LogVerbose(this, "Adding myself to the Device Manager");
             DeviceManager.AddDevice(this);
 
             IncomingCallFeedback.OutputChange += (sender, args) =>
@@ -257,26 +254,28 @@ namespace PepperDashPluginSymetrixComposer
 
         public void SetVolume(ushort level)
         {
-            ((IBasicVolumeWithFeedback) _atcRx).SetVolume(level);
+            ((IBasicVolumeWithFeedback)_atcRx).SetVolume(level);
         }
 
         public void MuteOn()
         {
-            ((IBasicVolumeWithFeedback) _atcRx).MuteOn();
+            ((IBasicVolumeWithFeedback)_atcRx).MuteOn();
         }
 
         public void MuteOff()
         {
-            ((IBasicVolumeWithFeedback) _atcRx).MuteOff();
+            ((IBasicVolumeWithFeedback)_atcRx).MuteOff();
         }
 
         public IntFeedback VolumeLevelFeedback
         {
-            get { return _atcRx.VolumeLevelFeedback; } }
+            get { return _atcRx.VolumeLevelFeedback; }
+        }
 
         public BoolFeedback MuteFeedback
         {
-            get { return _atcRx.MuteFeedback; } }
+            get { return _atcRx.MuteFeedback; }
+        }
 
         public void DoNotDisturbToggle()
         {
@@ -347,7 +346,7 @@ namespace PepperDashPluginSymetrixComposer
 
         public void SendDtmfToPhone(string digit)
         {
-            if(!PhoneOffHookFeedback.BoolValue)
+            if (!PhoneOffHookFeedback.BoolValue)
                 return;
 
             DialerUtils
@@ -487,17 +486,17 @@ namespace PepperDashPluginSymetrixComposer
 
         public void VolumeUp(bool pressRelease)
         {
-            ((IBasicVolumeControls) _atcRx).VolumeUp(pressRelease);
+            ((IBasicVolumeControls)_atcRx).VolumeUp(pressRelease);
         }
 
         public void VolumeDown(bool pressRelease)
         {
-            ((IBasicVolumeControls) _atcRx).VolumeDown(pressRelease);
+            ((IBasicVolumeControls)_atcRx).VolumeDown(pressRelease);
         }
 
         public void MuteToggle()
         {
-            ((IBasicVolumeControls) _atcRx).MuteToggle();
+            ((IBasicVolumeControls)_atcRx).MuteToggle();
         }
 
 

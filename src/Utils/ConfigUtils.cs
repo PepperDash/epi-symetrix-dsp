@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using PepperDash.Core;
-using PepperDashPluginSymetrixComposer.Config;
+using PepperDash.Essentials.Plugin.SymetrixComposer.Config;
 
-namespace PepperDashPluginSymetrixComposer.Utils
+namespace PepperDash.Essentials.Plugin.SymetrixComposer.Utils
 {
     public static class ConfigUtils
     {
